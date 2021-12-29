@@ -87,7 +87,12 @@ const Home: NextPage = () => {
                 }
               }} 
             />
-            <h2 className={styles.headBlock_subtitle} style={{paddingTop: '1rem'}} >MUSO DISCOUNT =</h2>
+            <h2 
+              className={styles.headBlock_subtitle} 
+              style={{paddingTop: '1rem'}} 
+            >
+              MUSO DISCOUNT = {amount > 799.99 ? 20 : amount > 399.99 ? 15 : amount > 199.99 ? 10 : amount > 99.99 ? 5 : 0}%
+            </h2>
             <button
               disabled={amount === 0 || isNaN(amount)} 
               className={ (amount === 0 || isNaN(amount)) ? classNames(styles.button, styles.amount) : classNames(styles.button, styles.amount, styles.button__active)} 
@@ -98,11 +103,10 @@ const Home: NextPage = () => {
           <div className={classNames(styles.headBlock, styles.dashboard)} >
             <h2 className={styles.headBlock_title} >Discount (QR CODE)</h2>
             <ul className={styles.headBlock_list}>
-              <li onClick={()=>setAmount(500)} >$500<div className={styles.dash}></div>5%</li>
-              <li onClick={()=>setAmount(900)} >$900<div className={styles.dash}></div>10%</li>
-              <li onClick={()=>setAmount(1600)} >$1600<div className={styles.dash}></div>15%</li>
-              <li onClick={()=>setAmount(3000)} >$3000<div className={styles.dash}></div>20%</li>
-              <li onClick={()=>setAmount(3000.01)} >$3001.01<div className={styles.dash}></div>25%</li>
+              <li onClick={()=>setAmount(100)} >$100<div className={styles.dash}></div>5%</li>
+              <li onClick={()=>setAmount(200)} >$200<div className={styles.dash}></div>10%</li>
+              <li onClick={()=>setAmount(400)} >$400<div className={styles.dash}></div>15%</li>
+              <li onClick={()=>setAmount(800)} >$800<div className={styles.dash}></div>20%</li>
             </ul>
           </div>
         </div>
