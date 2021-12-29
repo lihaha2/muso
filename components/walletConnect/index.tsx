@@ -52,23 +52,22 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
     }, [activatingConnector, connector])
     const triedEager = useEagerConnect()
 
-    useEffect(()=>{
-        deactivate()
-        setActivatingConnector(undefined)
-    },[error, deactivate])
+    // useEffect(()=>{
+    //     setActivatingConnector(undefined)
+    // },[error, deactivate])
 
-    useEffect(()=>{
-        console.log({
-            connector, 
-            library, 
-            chainId, 
-            account, 
-            activate, 
-            deactivate, 
-            active, 
-            error
-        })
-    },[connector, library, chainId, account, activate, deactivate, active, error])
+    // useEffect(()=>{
+    //     console.log({
+    //         connector, 
+    //         library, 
+    //         chainId, 
+    //         account, 
+    //         activate, 
+    //         deactivate, 
+    //         active, 
+    //         error
+    //     })
+    // },[connector, library, chainId, account, activate, deactivate, active, error])
 
     // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
     useInactiveListener(!triedEager || !!activatingConnector)
@@ -91,6 +90,7 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
     }
 
     return (
+        <>
         <div 
             style={{display: open ? 'flex' : 'none'}} 
             className={styles.modalContainer} 
@@ -121,6 +121,7 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
                                     deactivate()
                                     setActivatingConnector(undefined)
                                 }, false)
+                                setOpen(false)
                             }}
                         >
                             <Image width={200} height={35} src={`/wallets/${name}.svg`} alt={name} />
@@ -149,6 +150,7 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
                 {!!error && <h4 style={{ marginTop: '1rem', marginBottom: '0' }}>{getErrorMessage(error)}</h4>}
             </div> */}
         </div>
+        </>
     )
 }
 

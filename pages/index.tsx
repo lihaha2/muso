@@ -10,6 +10,7 @@ import WalletConnect from '../components/walletConnect'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useMediaQuery } from '@material-ui/core'
+import { NextSeo } from 'next-seo'
 
 const Home: NextPage = () => {
   const [amount, setAmount] = useState(0)
@@ -18,21 +19,49 @@ const Home: NextPage = () => {
   const { connector, library, chainId, account, activate, deactivate, active, error } = context
   const matches = useMediaQuery('(max-width:400px)')
 
+  // useEffect(()=>console.log('context',context),[context])
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Fresh Stake – Muso Finance</title>
+        <title>Stake – Muso Finance</title>
         <meta name="description" content="Muso Finance" />
         <link rel="icon" href="/logo/MUSO_BRAND_32x32.png" />
       </Head>
-      {/* <header className={styles.header}>
+      <NextSeo
+        title="Stake - Muso Finance"
+        description=""
+        canonical="https://muso.finance/"
+        openGraph={{
+          title: "Stake MUSO",
+          description: "",
+          url: `https://muso.finance`,
+          type: "website",
+          images: [
+            {
+              url: `https://muso.vercel.app/logo/MUSO_BRAND.png`,
+              alt: "Logo"
+            }
+          ],
+          site_name: 'Muso Stake'
+        }}
+      />
+      <header className={styles.header}>
         <Link href={'#'}>
-          <a>
-            <Image width={48} height={48} src={'/logo/MUSO_BRAND.png'} alt='logo' />
+          <a className={styles.logo}>
+            <Image width={65} height={65} src={'/logo/MUSO_BRAND.png'} alt='logo' />
           </a>
         </Link>
-        <button>{account ? `${account.substring(0, 6)}...` : 'Connect wallet'}</button>
-      </header> */}
+        <div className={styles.wallet}>
+          {account && <div className={styles.wallet_info} title={account}>{account.substring(0, 6)}...</div>}
+          <button 
+            className={styles.wallet_button}
+            onClick={ account ? deactivate : ()=> setModalOpen(true) }
+          >
+            {account ? 'Log Out' : 'Connect wallet'}
+          </button>
+        </div>
+      </header>
 
       <main className={styles.main}>
         <div className={styles.headBlocks} >
@@ -127,10 +156,12 @@ const Home: NextPage = () => {
           © 2021 MUSO Finance Ltd. All rights reserved.
         </div>
       </footer>
-      {!account && <WalletConnect 
-        open={modalOpen} 
-        setOpen={setModalOpen}
-      />}
+      {
+        <WalletConnect 
+          open={modalOpen} 
+          setOpen={setModalOpen}
+        />
+      }
     </div>
   )
 }
