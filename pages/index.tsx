@@ -132,11 +132,18 @@ const Home: NextPage = () => {
             {!matches && 
               <div className={styles.QRContainer}>
                 <QRCode
-                  value={'google.com'}
+                  value={'https://muso.finance/'}
                   size={300}
                   level="Q"
                   renderAs="svg"
                   includeMargin={false}
+                  imageSettings={
+                    {
+                      src:'/logo/MUSO_BRAND_WHITE.png',
+                      width: 64,
+                      height: 64
+                    }
+                  }
                 />
               </div>
             }

@@ -5,16 +5,16 @@ import { FortmaticConnector } from '@web3-react/fortmatic-connector'
 import { PortisConnector } from '@web3-react/portis-connector'
 import { BscConnector } from '@binance-chain/bsc-connector'
 
-export const bsc = new BscConnector({
-  supportedChainIds: [1, 3, 56, 97] // later on 1 ethereum mainnet and 3 ethereum ropsten will be supported
-})
-
 const RPC_URLS: { [chainId: number]: string } = {
   1: process.env.RPC_URL_1 as string,
   4: process.env.RPC_URL_4 as string
 }
 
 const CHAIN_IDS = [1, 3, 4, 5, 42]
+
+export const bsc = new BscConnector({
+  supportedChainIds: [1, 3, 56, 97] // later on 1 ethereum mainnet and 3 ethereum ropsten will be supported
+})
 
 export const injected = new InjectedConnector({ supportedChainIds: CHAIN_IDS })
 

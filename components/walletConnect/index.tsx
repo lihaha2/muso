@@ -19,7 +19,7 @@ import Image from 'next/image'
 enum ConnectorNames {
     Injected = 'Injected',
     Binance = 'Binance',
-    WalletConnect = 'WalletConnect',
+    // WalletConnect = 'WalletConnect',
     WalletLink = 'WalletLink',
     Fortmatic = 'Fortmatic',
     Portis = 'Portis'
@@ -28,7 +28,7 @@ enum ConnectorNames {
 const connectorsByName: { [connectorName in ConnectorNames]: any } = {
     [ConnectorNames.Injected]: injected,
     [ConnectorNames.Binance]: bsc,
-    [ConnectorNames.WalletConnect]: walletconnect,
+    // [ConnectorNames.WalletConnect]: walletconnect,
     [ConnectorNames.WalletLink]: walletlink,
     [ConnectorNames.Fortmatic]: fortmatic,
     [ConnectorNames.Portis]: portis
@@ -51,23 +51,6 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
       }
     }, [activatingConnector, connector])
     const triedEager = useEagerConnect()
-
-    // useEffect(()=>{
-    //     setActivatingConnector(undefined)
-    // },[error, deactivate])
-
-    // useEffect(()=>{
-    //     console.log({
-    //         connector, 
-    //         library, 
-    //         chainId, 
-    //         account, 
-    //         activate, 
-    //         deactivate, 
-    //         active, 
-    //         error
-    //     })
-    // },[connector, library, chainId, account, activate, deactivate, active, error])
 
     // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
     useInactiveListener(!triedEager || !!activatingConnector)
