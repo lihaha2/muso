@@ -200,6 +200,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    transition: 0.3s font-weight;
 }
 
 .headBlock li:hover{
@@ -254,6 +255,25 @@
     width: 100%;
     max-width: 233px;
     height: 200px;
+    position: relative;
+}
+
+.nav_item__content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 29px;
+}
+
+.willQR{
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 29px;
+    color: #FF6208;
+    text-align: center;
 }
 
 .footBlock_content__buttons{

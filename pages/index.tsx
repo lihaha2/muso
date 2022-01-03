@@ -11,15 +11,20 @@ import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useMediaQuery } from '@material-ui/core'
 import { NextSeo } from 'next-seo'
+import Loader from '../components/Loader'
 
-const Home: NextPage = () => {
+interface IProps {
+  loading: boolean,
+  setLoading: (loading:boolean)=> void
+}
+
+const Home: NextPage<IProps> = (props) => {
   const [amount, setAmount] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
   const context = useWeb3React<Web3Provider>()
   const { connector, library, chainId, account, activate, deactivate, active, error } = context
   const matches = useMediaQuery('(max-width:400px)')
-
-  // useEffect(()=>console.log('context',context),[context])
+  const {loading, setLoading} = props
 
   return (
     <div className={styles.container}>
@@ -96,6 +101,10 @@ const Home: NextPage = () => {
             <button
               disabled={amount === 0 || isNaN(amount)} 
               className={ (amount === 0 || isNaN(amount)) ? classNames(styles.button, styles.amount) : classNames(styles.button, styles.amount, styles.button__active)} 
+              onClick={()=>{
+                setLoading(true)
+                setTimeout(() => setLoading(false), 2 * 1000)
+              }}
             >
               Enter amount
             </button>
@@ -116,22 +125,46 @@ const Home: NextPage = () => {
               <div className={styles.footBlock_content__nav}>
                 <div className={styles.nav_item}>
                   <p>Amount Staked</p>
+                  <p className={styles.nav_item__content}>
+                    {/* $100 */}
+                     – 
+                  </p>
                 </div>
                 <div className={styles.nav_item}>
                   <p>Time Staked</p>
+                  <p className={styles.nav_item__content}>
+                    {/* 3 month */}
+                     – 
+                  </p>
                 </div>
                 <div className={styles.nav_item}>
                   <p>Unlock Time</p>
+                  <p className={styles.nav_item__content}>
+                    {/* 30.03.2022 */}
+                    – 
+                  </p>
                 </div>
               </div>
               <div className={styles.footBlock_content__buttons}>
-                <button className={classNames(styles.button, styles.button__active)} >Unlock</button>
-                <button className={classNames(styles.button, styles.button__active)} >Re-stake</button>
+                <button 
+                  className={classNames(styles.button, styles.button__active)} 
+                  onClick={()=>{
+                    setLoading(true)
+                    setTimeout(() => setLoading(false), 2 * 1000)
+                  }}
+                >Unlock</button>
+                <button 
+                  className={classNames(styles.button, styles.button__active)} 
+                  onClick={()=>{
+                    setLoading(true)
+                    setTimeout(() => setLoading(false), 2 * 1000)
+                  }}
+                >Re-stake</button>
               </div>
             </div>
             {!matches && 
               <div className={styles.QRContainer}>
-                <QRCode
+                {/* <QRCode
                   value={'https://muso.finance/'}
                   size={300}
                   level="Q"
@@ -144,7 +177,10 @@ const Home: NextPage = () => {
                       height: 64
                     }
                   }
-                />
+                /> */}
+                <div className={styles.willQR}>
+                  Here will be your QR code after the Staking .
+                </div>
               </div>
             }
           </div>
@@ -172,6 +208,9 @@ const Home: NextPage = () => {
           open={modalOpen} 
           setOpen={setModalOpen}
         />
+      }
+      {
+        <Loader loading={loading} />
       }
     </div>
   )
