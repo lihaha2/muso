@@ -398,6 +398,10 @@
         text-align: start;
         width: auto;
     }
+
+    .nav_item__content{
+        transform: translate(-50%, -10%);
+    }
 }
 
 
