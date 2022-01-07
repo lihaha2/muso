@@ -109,7 +109,7 @@
     width: 100%;
     background: transparent;
     color: var(--white);
-    padding: 30px 20px 20px 20px;
+    padding: 17px 20px;
     outline: none;
     border: 2px solid #FF6208;
     box-sizing: border-box;
@@ -118,8 +118,29 @@
     font-style: normal;
     font-weight: 300;
     font-size: 20px;
-    line-height: 23px;
+    line-height: 20px;
+}
+
+.inputGroup{
     margin: 25px 0 0 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+.inputCurrency{
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.musoCurrency{
+    margin: 10px;
 }
 
 .amount{
@@ -311,6 +332,46 @@
     padding: 8.5px;
 }
 
+.stakingBody{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.form{
+    width: 50%;
+}
+
+.stakingButtons{
+    width: 50%;
+}
+
+.stakingButtons_body{
+    margin: 25px 0;
+    display: flex;
+    gap: 25px;
+}
+
+.timeButton{
+    cursor: pointer;
+    background: transparent;
+    outline: 2px solid var(--orange);
+}
+
+.nowTime{
+    background-image: linear-gradient(101deg, #FF6A00 40%, #FF0069 50%);
+    animation: post 3s ease infinite;
+    background-size: 200%;
+    box-shadow: 0px 5px 10px 0px rgb(252 50 50 / 49%);
+    outline: none;
+    padding: 2px;
+}
+
+.nowTime:disabled{
+    cursor: default;
+}
+
+
 @media(max-width: 1200px){
     .footBlock {
         flex-direction: column;
@@ -319,19 +380,24 @@
     .footBlock_content{
         margin-right: 0;
     }
-}
-
-@media(max-width: 920px){
     .headBlocks{
         flex-direction: column;
     }
-
     .dashboard{
         max-width: none;
     }
 
     .nav_item{
         padding: 18px 25px;
+    }
+    .stake{
+        max-width: none;
+    }
+}
+
+@media(max-width: 760px){
+    .timeButton{
+        font-size: 18px;
     }
 }
 
@@ -372,9 +438,12 @@
         padding: 24px 18px;
     }
     .headBlock_input{
-        padding: 30px 20px 12px 11px;
+        padding: 18.5px 45px 18.5px 20px;
         font-size: 15px;
-        line-height: 18px;
+        line-height: 15px;
+    }
+    .stakingButtons_body{
+        gap: 15px;
     }
     .headBlocks, .main{
         gap: 24px;
@@ -401,6 +470,21 @@
 
     .nav_item__content{
         transform: translate(-50%, -10%);
+    }
+    .inputCurrency{
+        font-size: 20px;
+    }
+}
+
+
+@media(max-width: 500px){
+    .stakingBody{
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .form, .stakingButtons{
+        width: 100%;
     }
 }
 

@@ -12,6 +12,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useMediaQuery } from '@material-ui/core'
 import { NextSeo } from 'next-seo'
 import Loader from '../components/Loader'
+import axios from 'axios'
 
 interface IProps {
   loading: boolean,
@@ -20,11 +21,26 @@ interface IProps {
 
 const Home: NextPage<IProps> = (props) => {
   const [amount, setAmount] = useState(0)
+  const [stakeTime, setStakeTime] = useState(12)
+  const [musoCourse, setMusoCourse] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
   const context = useWeb3React<Web3Provider>()
   const { connector, library, chainId, account, activate, deactivate, active, error } = context
   const matches = useMediaQuery('(max-width:400px)')
   const {loading, setLoading} = props
+
+  useEffect(() => {
+    (async()=>{
+      try {
+        const res = await axios.get(`https://api.pancakeswap.info/api/v2/tokens/0xC08E10b7Eb0736368A0B92EE7a140eC8C63A2dd1`)
+
+      console.log()
+      setMusoCourse(parseFloat(res.data.data.price))
+      } catch (error) {
+        console.log({...error})
+      }
+    })()
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -72,29 +88,73 @@ const Home: NextPage<IProps> = (props) => {
         <div className={styles.headBlocks} >
           <div className={classNames(styles.headBlock, styles.stake)} >
             <h2 className={styles.headBlock_title} >New Stake</h2>
-            <h3 className={styles.headBlock_subtitle}>Numerical</h3>
-            <input
-              className={styles.headBlock_input} 
-              type="number" 
-              min="0" 
-              max="9999999"
-              placeholder='Enter staked amount' 
-              minLength={1}
-              value={amount} 
-              onChange={ el => {
-                let val = el.target.value
-                if(val.substring(0, 1) === '0' && val.length > 1){
-                  setAmount(parseFloat(val.replace('0', '')))
-                  el.target.value = amount.toString()
+            <div className={styles.stakingBody}>
+              <div className={styles.form}>
+                <h3 className={styles.headBlock_subtitle}>Amount</h3>
+                <div className={styles.inputGroup}>
+                  <input
+                    className={styles.headBlock_input} 
+                    type="number" 
+                    min="0" 
+                    max="9999999"
+                    placeholder='Enter staked amount' 
+                    minLength={1}
+                    value={amount} 
+                    onChange={ el => {
+                      let val = el.target.value
+
+                      if(val.length >= 9999999) {
+                        return false
+                      }
+
+                      if(val.substring(0, 1) === '0' && val.length > 1){
+                        setAmount(parseFloat(val.replace('0', '')))
+                        el.target.value = amount.toString()
+                      }
+                      else{
+                        setAmount(parseFloat(val))
+                      }
+                    }} 
+                  />
+                  <span className={styles.inputCurrency} >$</span>
+                </div>
+                {
+                  musoCourse ? <div className={styles.musoCurrency}>
+                    {(( !isNaN(amount) ? amount : 0 ) / musoCourse).toFixed(2)} MUSO
+                  </div> : null
                 }
-                else{
-                  setAmount(parseFloat(val))
-                }
-              }} 
-            />
+                
+              </div>
+              <div className={styles.stakingButtons}>
+                <h3 className={styles.headBlock_subtitle}>Time (Months)</h3>
+                <div className={styles.stakingButtons_body}>
+                  <button
+                    className={stakeTime === 3 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)} 
+                    onClick={()=>setStakeTime(3)}
+                    disabled={stakeTime === 3}
+                  >
+                    3
+                  </button>
+                  <button
+                    className={stakeTime === 6 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)} 
+                    onClick={()=>setStakeTime(6)}
+                    disabled={stakeTime === 6}
+                  >
+                    6
+                  </button>
+                  <button
+                    className={stakeTime === 12 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)} 
+                    onClick={()=>setStakeTime(12)}
+                    disabled={stakeTime === 12}
+                  >
+                    12
+                  </button>
+                </div>
+              </div>
+            </div>
             <h2 
               className={styles.headBlock_subtitle} 
-              style={{paddingTop: '1rem'}} 
+              style={{margin: '30px 0 0 0'}} 
             >
               MUSO DISCOUNT = {amount > 799.99 ? 20 : amount > 399.99 ? 15 : amount > 199.99 ? 10 : amount > 99.99 ? 5 : 0}%
             </h2>
