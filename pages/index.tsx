@@ -12,7 +12,11 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useMediaQuery } from '@material-ui/core'
 import { NextSeo } from 'next-seo'
 import Loader from '../components/Loader'
+import ErrorModal from '../components/ErrorModal'
 import axios from 'axios'
+import { getUserBalance } from '../src/contract'
+import { ethers } from 'ethers'
+
 
 interface IProps {
   loading: boolean,
@@ -23,6 +27,7 @@ const Home: NextPage<IProps> = (props) => {
   const [amount, setAmount] = useState(0)
   const [stakeTime, setStakeTime] = useState(12)
   const [musoCourse, setMusoCourse] = useState(0)
+  const [musoBalance, setMusoBalance] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
   const context = useWeb3React<Web3Provider>()
   const { connector, library, chainId, account, activate, deactivate, active, error } = context
@@ -33,14 +38,29 @@ const Home: NextPage<IProps> = (props) => {
     (async()=>{
       try {
         const res = await axios.get(`https://api.pancakeswap.info/api/v2/tokens/0xC08E10b7Eb0736368A0B92EE7a140eC8C63A2dd1`)
-
-      console.log()
-      setMusoCourse(parseFloat(res.data.data.price))
+        setMusoCourse(parseFloat(res.data.data.price))
       } catch (error) {
         console.log({...error})
       }
     })()
-  }, [])
+    console.log(context)
+  }, [context])
+
+  useEffect(() => {
+    (async()=>{
+      if(library && account){
+        const res = await getUserBalance(account, library)
+        const resStr = res.toString()
+        const resFloat = parseFloat(`${resStr.substring(0,resStr.length - 9 )}.${resStr.substring(resStr.length - 9, resStr.length)}`)
+        console.log(resFloat)
+        if(!isNaN(resFloat) || resFloat > 0.00){
+          setMusoBalance(resFloat)
+          console.log('asdasd')
+        }
+      }
+    })()
+    
+  }, [library, account])
 
   return (
     <div className={styles.container}>
@@ -74,12 +94,15 @@ const Home: NextPage<IProps> = (props) => {
           </a>
         </Link>
         <div className={styles.wallet}>
-          {account && <div className={styles.wallet_info} title={account}>{account.substring(0, 6)}...</div>}
+          {account && <div className={styles.wallet_info} title={`${!isNaN(musoBalance) ? musoBalance+' MUSO' : ''} ${account}`}>
+            {!isNaN(musoBalance) ? <span style={{margin: '0 20px 0 0'}} >{musoBalance.toLocaleString()} MUSO </span> : null}
+            {account.substring(0, 5)}...{account.substring(account.length-2, account.length)}
+          </div>}
           <button 
             className={styles.wallet_button}
-            onClick={ account ? deactivate : ()=> setModalOpen(true) }
+            onClick={ active ? deactivate : ()=> setModalOpen(true) }
           >
-            {account ? 'Log Out' : 'Connect wallet'}
+            {active ? 'Log Out' : 'Connect wallet'}
           </button>
         </div>
       </header>
@@ -95,15 +118,15 @@ const Home: NextPage<IProps> = (props) => {
                   <input
                     className={styles.headBlock_input} 
                     type="number" 
-                    min="0" 
-                    max="9999999"
+                    min="0.0" 
+                    max="9999999.0"
                     placeholder='Enter staked amount' 
                     minLength={1}
                     value={amount} 
                     onChange={ el => {
                       let val = el.target.value
 
-                      if(val.length >= 9999999) {
+                      if(val.length >= 11) {
                         return false
                       }
 
@@ -120,7 +143,7 @@ const Home: NextPage<IProps> = (props) => {
                 </div>
                 {
                   musoCourse ? <div className={styles.musoCurrency}>
-                    {(( !isNaN(amount) ? amount : 0 ) / musoCourse).toFixed(2)} MUSO
+                    {(( !isNaN(amount) ? amount : 0 ) / musoCourse).toLocaleString()} MUSO
                   </div> : null
                 }
                 
@@ -272,6 +295,7 @@ const Home: NextPage<IProps> = (props) => {
       {
         <Loader loading={loading} />
       }
+        <ErrorModal />
     </div>
   )
 }

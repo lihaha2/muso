@@ -5,6 +5,17 @@ import { Web3Provider } from '@ethersproject/providers'
 import { useState, useEffect } from 'react'
 import Router from "next/router"
 
+// // @ts-ignore
+// web3.setProvider(library.provider)
+
+// (async()=>{
+//     try {
+//         await web3.eth.getAccounts(console.log)
+//     } catch (error) {
+//         console.log({...error})
+//     }
+// })()
+
 const getLibrary = (provider: any): Web3Provider => {
   const library = new Web3Provider(provider)
   library.pollingInterval = 12000

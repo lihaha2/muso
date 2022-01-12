@@ -109,7 +109,7 @@
     width: 100%;
     background: transparent;
     color: var(--white);
-    padding: 17px 20px;
+    padding: 19px 20px 15px 20px;
     outline: none;
     border: 2px solid #FF6208;
     box-sizing: border-box;
@@ -353,9 +353,10 @@
 }
 
 .timeButton{
+    width: 30%;
     cursor: pointer;
     background: transparent;
-    outline: 2px solid var(--orange);
+    border: 2px solid var(--orange);
 }
 
 .nowTime{
@@ -369,6 +370,7 @@
 
 .nowTime:disabled{
     cursor: default;
+    border: none;
 }
 
 
@@ -438,7 +440,7 @@
         padding: 24px 18px;
     }
     .headBlock_input{
-        padding: 18.5px 45px 18.5px 20px;
+        padding: 20.5px 45px 16.5px 20px;
         font-size: 15px;
         line-height: 15px;
     }

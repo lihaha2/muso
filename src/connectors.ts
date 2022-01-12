@@ -1,8 +1,6 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
-import { FortmaticConnector } from '@web3-react/fortmatic-connector'
-import { PortisConnector } from '@web3-react/portis-connector'
 import { BscConnector } from '@binance-chain/bsc-connector'
 
 const RPC_URLS: { [chainId: number]: string } = {
@@ -26,9 +24,8 @@ export const walletconnect = new WalletConnectConnector({
 export const walletlink = new WalletLinkConnector({
   url: RPC_URLS[56],
   appName: 'MUSO Finance',
-  supportedChainIds: CHAIN_IDS
+  supportedChainIds: [...CHAIN_IDS],
+  appLogoUrl: 'https://muso.vercel.app/logo/MUSO_BRAND.png'
 })
 
-export const fortmatic = new FortmaticConnector({ apiKey: process.env.FORTMATIC_API_KEY as string, chainId: 1 })
-
-export const portis = new PortisConnector({ dAppId: process.env.PORTIS_DAPP_ID as string, networks: [1] })
+// export const fortmatic = new FortmaticConnector({ apiKey: process.env.FORTMATIC_API_KEY as string, chainId: 1 })
