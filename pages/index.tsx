@@ -14,7 +14,7 @@ import { NextSeo } from 'next-seo'
 import Loader from '../components/Loader'
 import ErrorModal from '../components/ErrorModal'
 import axios from 'axios'
-import { getUserBalance } from '../src/contract'
+import { getUserBalance, approveContract } from '../src/contract'
 import { ethers } from 'ethers'
 
 
@@ -52,11 +52,10 @@ const Home: NextPage<IProps> = (props) => {
         const res = await getUserBalance(account, library)
         const resStr = res.toString()
         const resFloat = parseFloat(`${resStr.substring(0,resStr.length - 9 )}.${resStr.substring(resStr.length - 9, resStr.length)}`)
-        console.log(resFloat)
         if(!isNaN(resFloat) || resFloat > 0.00){
           setMusoBalance(resFloat)
-          console.log('asdasd')
         }
+        await approveContract(account, library)
       }
     })()
     

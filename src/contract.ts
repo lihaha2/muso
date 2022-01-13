@@ -1,36 +1,42 @@
 import {tokenabi, tokenAddress} from './musoABI'
 import { ethers } from "ethers"
 
-// export const getWallet = (pub_key, provider)=>{
-//     let wallet = new ethers.Wallet(pub_key, provider)
-//     console.log('wallet',wallet)
-//     return wallet
-// }
 
 export const tokenContract = (buyer, provider)=>{
     let wallet = new ethers.Wallet(buyer, provider)
-    console.log('wallet', wallet)
     const res = new ethers.Contract(tokenAddress, tokenabi, wallet)
     return res
 }
 
-//  = new web3.eth.Contract(tokenabi, tokenAddress)
-
-// export const connectProvider = (provider) => web3.setProvider(provider)
-
-
 export const getUserBalance = async(buyer, provider)=> {
-    if(!buyer || !provider){
-        console.log('give me my arguments')
-        return false
-    }
     try {
-        console.log('getAllowance params', {buyer, provider})
         const res = await tokenContract(tokenAddress, provider).balanceOf(buyer)
-        // const res = await tokenContract(tokenAddress, provider).balanceOf(tokenAddress, 999999)
-        // const res = await tokenContract(provider).allowance(buyer, tokenAddress)
-        
         return res
+    }
+    catch(err) { 
+        console.log('balance err',{err})
+        return false 
+    }
+}
+
+export const getAllowance = async(buyer, provider)=> {
+    try {
+        const res = await tokenContract(buyer,provider).allowance(buyer, tokenAddress)
+        return res
+    }
+    catch(err) { 
+        console.log('allowance err',{err})
+        return false 
+    }
+}
+
+export const approveContract = async(buyer, provider)=> {
+    try {
+        const contract = await tokenContract(buyer,provider)
+        const gas = await contract.estimateGas.approve(tokenAddress, 100000)
+        console.log(gas.toNumber())
+        // const res = await tokenContract(buyer,provider).approve(buyer, tokenAddress)
+        return gas
     }
     catch(err) { 
         console.log('allowance err',{err})
