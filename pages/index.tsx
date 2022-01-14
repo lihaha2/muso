@@ -43,7 +43,6 @@ const Home: NextPage<IProps> = (props) => {
         console.log({...error})
       }
     })()
-    console.log(context)
   }, [context])
 
   useEffect(() => {

@@ -44,22 +44,8 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
         setActivatingConnector(undefined)
       }
     }, [activatingConnector, connector, error])
-    
-    useEffect(() => {
-      if (!!error) {
-        console.log('error')
-      }
-    }, [error])
 
     const triedEager = useEagerConnect()
-
-    useEffect(() => {
-        const int = setInterval(()=>{
-            console.log(!triedEager || !!activatingConnector  || !!error)
-        },1000)
-
-        return clearInterval(int)
-    }, [])
 
     // handle logic to connect in reaction to certain events on the injected ethereum provider, if it exists
     useInactiveListener(!triedEager || !!activatingConnector)
@@ -110,7 +96,6 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
                                 setActivatingConnector(connectorsByName[name])
                                 activate(connectorsByName[name])
                                 setOpen(false)
-                                console.log('awezvz',{triedEager, activatingConnector, error})
                             }}
                         >
                             <Image width={200} height={35} src={`/wallets/${name}.svg`} alt={name} />
