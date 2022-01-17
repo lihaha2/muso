@@ -444,8 +444,11 @@
     .footBlock_content__buttons{
         gap: 15px;
     }
+    .header{
+        padding: 5px 1rem;
+    }
     .main{
-        padding: 48px 32px;
+        padding: 48px 1rem;
     }
     .headBlock{
         border-radius: 10px;

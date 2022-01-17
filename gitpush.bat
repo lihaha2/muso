@@ -1,4 +1,4 @@
-cd C:\Windows\System32\cmd.exe
+cd C:\Users\Misha\Desktop\Projects\next\muso
 git add .
 git commit -m "fix"
 git push
