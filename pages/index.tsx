@@ -85,23 +85,27 @@ const Home: NextPage<IProps> = (props) => {
           site_name: 'Muso Stake'
         }}
       />
-      <header className={styles.header}>
-        <Link href={'#'}>
-          <a className={styles.logo}>
-            <Image width={65} height={65} src={'/logo/MUSO_BRAND.png'} alt='logo' />
-          </a>
-        </Link>
-        <div className={styles.wallet}>
-          {account && <div className={styles.wallet_info} title={`${!isNaN(musoBalance) ? musoBalance+' MUSO' : ''} ${account}`}>
-            {!isNaN(musoBalance) ? <span style={{margin: '0 20px 0 0'}} >{musoBalance.toLocaleString()} MUSO </span> : null}
-            {account.substring(0, 5)}...{account.substring(account.length-2, account.length)}
-          </div>}
-          <button 
-            className={styles.wallet_button}
-            onClick={ active ? deactivate : ()=> setModalOpen(true) }
-          >
-            {active ? 'Log Out' : 'Connect wallet'}
-          </button>
+      <header className={styles.headerContainer}>
+        <div className={styles.header}>
+          <Link href={'#'}>
+            <a className={styles.logo}>
+              <Image width={65} height={65} src={'/logo/MUSO_BRAND.png'} alt='logo' />
+            </a>
+          </Link>
+          <div className={styles.wallet}>
+            {account && 
+              <div className={styles.wallet_info} title={`${!isNaN(musoBalance) ? musoBalance+' MUSO' : ''} ${account}`}>
+                {!isNaN(musoBalance) ? <span>{musoBalance.toLocaleString()} MUSO </span> : null}
+                <span>{account.substring(0, 5)}...{account.substring(account.length-2, account.length)}</span>
+              </div>
+            }
+            <button 
+              className={styles.wallet_button}
+              onClick={ active ? deactivate : ()=> setModalOpen(true) }
+            >
+              {active ? 'Log Out' : 'Connect wallet'}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -116,13 +120,16 @@ const Home: NextPage<IProps> = (props) => {
                   <input
                     className={styles.headBlock_input} 
                     type="number" 
-                    min="0.0" 
-                    max="9999999.0"
-                    placeholder='Enter staked amount' 
-                    minLength={1}
+                    min="0" 
+                    max="9999999"
+                    placeholder='Enter staked amount'
+                    step="any"
+                    lang="en"
                     value={amount} 
                     onChange={ el => {
                       let val = el.target.value
+                      // const regex = /^([^-+]?[0-9]+([,.]{1}[0-9]+)?)$/gm
+                      // if(!regex.test(val) && val.length > 1) return;
 
                       if(val.length >= 11) {
                         return false
@@ -173,12 +180,12 @@ const Home: NextPage<IProps> = (props) => {
                 </div>
               </div>
             </div>
-            <h2 
+            <h3 
               className={styles.headBlock_subtitle} 
               style={{margin: '30px 0 0 0'}} 
             >
               MUSO DISCOUNT = {amount > 799.99 ? 20 : amount > 399.99 ? 15 : amount > 199.99 ? 10 : amount > 99.99 ? 5 : 0}%
-            </h2>
+            </h3>
             <button
               disabled={amount === 0 || isNaN(amount)} 
               className={ (amount === 0 || isNaN(amount)) ? classNames(styles.button, styles.amount) : classNames(styles.button, styles.amount, styles.button__active)} 
