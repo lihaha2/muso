@@ -16,8 +16,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
   Router.events.off("routeChangeStart", () => {
     setLoading(true)
-  });
-
+  })
   Router.events.off("routeChangeComplete", () => {
     setLoading(false)
   })

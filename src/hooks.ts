@@ -11,7 +11,8 @@ export function useEagerConnect() {
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized: boolean) => {
       if (isAuthorized) {
-        activate(injected, undefined, true).catch(() => {
+        activate(injected, undefined, true).catch((err) => {
+          console.log('tryed err', err)
           setTried(true)
         })
       } else {
@@ -31,8 +32,8 @@ export function useEagerConnect() {
 }
 
 export function useInactiveListener(suppress: boolean = false) {
-  const { active, error, activate } = useWeb3React()
-
+  const { active, error, activate, deactivate } = useWeb3React()
+ 
   useEffect((): any => {
     const { ethereum } = window as any
     if (ethereum && ethereum.on && !active && !error && !suppress) {
@@ -54,11 +55,16 @@ export function useInactiveListener(suppress: boolean = false) {
         console.log("Handling 'networkChanged' event with payload", networkId)
         activate(injected)
       }
+      const handleDisconnect = (error) => {
+        console.log("Handling 'disconnect' event with payload", error)
+        deactivate()
+      }
 
       ethereum.on('connect', handleConnect)
       ethereum.on('chainChanged', handleChainChanged)
       ethereum.on('accountsChanged', handleAccountsChanged)
       ethereum.on('networkChanged', handleNetworkChanged)
+      ethereum.on('disconnect', handleDisconnect)
 
       return () => {
         if (ethereum.removeListener) {
@@ -66,6 +72,7 @@ export function useInactiveListener(suppress: boolean = false) {
           ethereum.removeListener('chainChanged', handleChainChanged)
           ethereum.removeListener('accountsChanged', handleAccountsChanged)
           ethereum.removeListener('networkChanged', handleNetworkChanged)
+          ethereum.removeListener('disconnect', handleDisconnect)
         }
       }
     }

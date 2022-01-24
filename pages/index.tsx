@@ -14,8 +14,7 @@ import { NextSeo } from 'next-seo'
 import Loader from '../components/Loader'
 import ErrorModal from '../components/ErrorModal'
 import axios from 'axios'
-import { getUserBalance, approveContract } from '../src/contract'
-import { ethers } from 'ethers'
+import { getUserBalance, approveContract, getAllowance } from '../src/contract'
 
 
 interface IProps {
@@ -30,7 +29,7 @@ const Home: NextPage<IProps> = (props) => {
   const [musoBalance, setMusoBalance] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
   const context = useWeb3React<Web3Provider>()
-  const { connector, library, chainId, account, activate, deactivate, active, error } = context
+  const { library, account, deactivate, active } = context
   const matches = useMediaQuery('(max-width:400px)')
   const {loading, setLoading} = props
 
@@ -50,15 +49,46 @@ const Home: NextPage<IProps> = (props) => {
       if(library && account){
         const res = await getUserBalance(account, library)
         const resStr = res.toString()
-        const resFloat = parseFloat(`${resStr.substring(0,resStr.length - 9 )}.${resStr.substring(resStr.length - 9, resStr.length)}`)
-        if(!isNaN(resFloat) || resFloat > 0.00){
-          setMusoBalance(resFloat)
-        }
+        const resFloat = parseFloat(`${resStr.substring(0,resStr.length - 9 )}.${resStr.substring(resStr.length - 9, resStr.length)}`);
+        (!isNaN(resFloat) || resFloat > 0.00) && setMusoBalance(resFloat)
         await approveContract(account, library)
       }
     })()
-    
+    if(library && account){
+      getAllowance(account, library)
+    }
   }, [library, account])
+
+  const FormButton = ()=>{
+    const nullValue = amount === 0 || isNaN(amount)
+    const noMoneyNoHoney = account ? (musoBalance < (amount / musoCourse)) : false
+
+    const stakeHandle = ()=>{
+      setLoading(true)
+      setTimeout(() => setLoading(false), 2 * 1000)
+    }
+    
+    const approveHandle = ()=>{
+      setLoading(true)
+      setTimeout(() => setLoading(false), 2 * 1000)
+    }
+
+    const connectHandle = ()=> setModalOpen(true)
+
+    return <button
+      disabled={nullValue || noMoneyNoHoney} 
+      className={ (nullValue || !account || noMoneyNoHoney) ? classNames(styles.button, styles.amount) : classNames(styles.button, styles.amount, styles.button__active)} 
+      onClick={!account ? connectHandle : stakeHandle}
+    >
+      { 
+        (!nullValue && !account) ? 
+          'Connect wallet' : 
+        (!nullValue && account && noMoneyNoHoney) ? 
+          'Insufficient balance' : 
+          'Enter amount'
+      }
+    </button>
+  }
 
   return (
     <div className={styles.container}>
@@ -94,9 +124,9 @@ const Home: NextPage<IProps> = (props) => {
           </Link>
           <div className={styles.wallet}>
             {account && 
-              <div className={styles.wallet_info} title={`${!isNaN(musoBalance) ? musoBalance+' MUSO' : ''} ${account}`}>
-                {!isNaN(musoBalance) ? <span>{musoBalance.toLocaleString()} MUSO </span> : null}
-                <span>{account.substring(0, 5)}...{account.substring(account.length-2, account.length)}</span>
+              <div className={styles.wallet_info}>
+                {!isNaN(musoBalance) ? <span onClick={()=>setAmount(parseFloat((musoCourse* 0.95 * musoBalance).toFixed(4)))} title={`${!isNaN(musoBalance) ? musoBalance+' MUSO' : ''}`} >{musoBalance.toLocaleString()} MUSO </span> : null}
+                <span title={account}>{account.substring(0, 5)}...{account.substring(account.length-2, account.length)}</span>
               </div>
             }
             <button 
@@ -128,12 +158,8 @@ const Home: NextPage<IProps> = (props) => {
                     value={amount} 
                     onChange={ el => {
                       let val = el.target.value
-                      // const regex = /^([^-+]?[0-9]+([,.]{1}[0-9]+)?)$/gm
-                      // if(!regex.test(val) && val.length > 1) return;
 
-                      if(val.length >= 11) {
-                        return false
-                      }
+                      if(val.length >= 11) {  return false  }
 
                       if(val.substring(0, 1) === '0' && val.length > 1){
                         setAmount(parseFloat(val.replace('0', '')))
@@ -186,16 +212,7 @@ const Home: NextPage<IProps> = (props) => {
             >
               MUSO DISCOUNT = {amount > 799.99 ? 20 : amount > 399.99 ? 15 : amount > 199.99 ? 10 : amount > 99.99 ? 5 : 0}%
             </h3>
-            <button
-              disabled={amount === 0 || isNaN(amount)} 
-              className={ (amount === 0 || isNaN(amount)) ? classNames(styles.button, styles.amount) : classNames(styles.button, styles.amount, styles.button__active)} 
-              onClick={()=>{
-                setLoading(true)
-                setTimeout(() => setLoading(false), 2 * 1000)
-              }}
-            >
-              Enter amount
-            </button>
+            <FormButton />
           </div>
           <div className={classNames(styles.headBlock, styles.dashboard)} >
             <h2 className={styles.headBlock_title} >Discount (QR CODE)</h2>

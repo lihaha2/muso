@@ -10,7 +10,8 @@ export const tokenContract = (buyer, provider)=>{
 
 export const getUserBalance = async(buyer, provider)=> {
     try {
-        const res = await tokenContract(tokenAddress, provider).balanceOf(buyer)
+        const contract = tokenContract(buyer,provider)
+        const res = await contract.balanceOf(buyer)
         return res
     }
     catch(err) { 
@@ -21,7 +22,9 @@ export const getUserBalance = async(buyer, provider)=> {
 
 export const getAllowance = async(buyer, provider)=> {
     try {
-        const res = await tokenContract(buyer,provider).allowance(buyer, tokenAddress)
+        const contract = tokenContract(buyer,provider)
+        const res = await contract.allowance(buyer, tokenAddress)
+        console.log('allowance',res.toNumber())
         return res
     }
     catch(err) { 
@@ -32,14 +35,16 @@ export const getAllowance = async(buyer, provider)=> {
 
 export const approveContract = async(buyer, provider)=> {
     try {
-        const contract = await tokenContract(buyer,provider)
+        const nonce = await provider.getTransactionCount(buyer)
+        const contract = tokenContract(buyer,provider)
         const gas = await contract.estimateGas.approve(tokenAddress, 100000)
         console.log(gas.toNumber())
-        // const res = await tokenContract(buyer,provider).approve(buyer, tokenAddress)
+        const res = await contract.approve(tokenAddress, 100000)
+        console.log('approve res',res)
         return gas
     }
     catch(err) { 
-        console.log('allowance err',{err})
+        console.log('approve err',{err})
         return false 
     }
 }
@@ -47,7 +52,7 @@ export const approveContract = async(buyer, provider)=> {
 // // апрув
 // export const approve = async(buyer, pool)=> {
 //     try {
-//         const nonce = await  web3.eth.getTransactionCount(buyer)
+//         const nonce = await web3.eth.getTransactionCount(buyer)
 //         const gas = await tokenContract.methods.approve(
 //              web3.utils.toChecksumAddress(pool.contractAddress), 
 //             '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'

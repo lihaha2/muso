@@ -1,7 +1,6 @@
 import styles from './Error.module.css'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
-import { useEagerConnect, useInactiveListener } from '../../src/hooks'
 import { NoEthereumProviderError, UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector'
 import { NoBscProviderError, UserRejectedRequestError as UserRejectedRequestErrorBSC } from '@binance-chain/bsc-connector'
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from '@web3-react/walletconnect-connector'
@@ -9,10 +8,10 @@ import {useState, useEffect} from 'react'
 
 const ErrorModal = ()=>{
     const context = useWeb3React<Web3Provider>()
-    const { connector, library, chainId, account, activate, deactivate, active, error } = context
+    const { deactivate, error } = context
     const [message, setMessage] = useState(null)
 
-    const getErrorMessage = (error: Error)=> {
+    const getErrorMessage = (error)=> {
 
         if (error instanceof NoEthereumProviderError) {
             return 'No Ethereum browser extension detected, install MetaMask on desktop or visit from a dApp browser on mobile.'
@@ -26,6 +25,8 @@ const ErrorModal = ()=>{
         error instanceof UserRejectedRequestErrorBSC
         ) {
             return 'Please authorize this website to access your account.'
+        }else if (error?.code as number === -32002){
+            return 'Please continue your authorization on browser extension.'
         } else {
         console.error(error)
             return `${error.message}`
@@ -35,10 +36,6 @@ const ErrorModal = ()=>{
     useEffect(() => {
         !!error ? setMessage(getErrorMessage(error)) : setMessage(null)
     }, [error])
-
-    const closeHandle = ()=>{
-        
-    }
 
     return message ?
         <div className={styles.container} onClick={deactivate} >

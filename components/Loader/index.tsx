@@ -13,7 +13,7 @@ const Loader = ({loading, className}:ILoader)=>(
         <div className={styles.preloader}>
         </div>
         <div className={styles.logo}>
-            <Image width={64} height={64} src={Logo} alt="loading" />
+            <Image width={64} height={64} src={Logo} alt="loading" priority />
         </div>
     </div>
     
