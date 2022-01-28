@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import {
     injected,
     walletconnect,
@@ -26,20 +26,20 @@ const connectorsByName: { [connectorName in ConnectorNames]: any } = {
 }
 
 interface IWallet {
-    open:boolean, 
-    setOpen: (open:boolean)=> void
+    open: boolean,
+    setOpen: (open: boolean) => void
 }
 
-const WalletConnect = ({open, setOpen}:IWallet) => {
+const WalletConnect = ({ open, setOpen }: IWallet) => {
 
     const context = useWeb3React<Web3Provider>()
     const { connector, activate, error } = context
     const [activatingConnector, setActivatingConnector] = useState<any>()
 
     useEffect(() => {
-      if (!!error || (activatingConnector && activatingConnector === connector)) {
-        setActivatingConnector(undefined)
-      }
+        if (!!error || (activatingConnector && activatingConnector === connector)) {
+            setActivatingConnector(undefined)
+        }
     }, [activatingConnector, connector, error])
 
     const triedEager = useEagerConnect()
@@ -49,39 +49,40 @@ const WalletConnect = ({open, setOpen}:IWallet) => {
 
     return (
         <>
-        <div 
-            style={{display: open ? 'flex' : 'none'}} 
-            className={styles.modalContainer} 
-            onClick={()=>setOpen(false)}
-        >
-            <div 
-                className={styles.modal}
-                onClick={(el)=>{
-                    el.preventDefault()
-                    el.stopPropagation()
-                }}
+            <div
+                style={open ? { visibility: 'visible' } : { visibility: 'hidden' }}
+                className={styles.modalContainer}
+                onClick={() => setOpen(false)}
             >
-                <h2 className={styles.modal_title} >Connect Wallet</h2>
-                {Object.keys(connectorsByName).map(name => {
-                    
-                    return (
-                        <button
-                            className={styles.connectButton}
-                            disabled={!triedEager || !!activatingConnector || (connectorsByName[name] === connector) || !!error}
-                            key={name}
-                            onClick={() => {
-                                // deactivate()
-                                // setActivatingConnector(connectorsByName[name])
-                                activate(connectorsByName[name])
-                                setOpen(false)
-                            }}
-                        >
-                            <Image width={200} height={35} src={`/wallets/${name}.svg`} alt={name} />
-                        </button>
-                    )
-                })}
+                <div
+                    style={open ? { visibility: 'visible', transform: 'translateY(0)' } : { visibility: 'hidden', transform: 'translateY(-30px)' }}
+                    className={styles.modal}
+                    onClick={(el) => {
+                        el.preventDefault()
+                        el.stopPropagation()
+                    }}
+                >
+                    <h2 className={styles.modal_title} >Connect Wallet</h2>
+                    {Object.keys(connectorsByName).map(name => {
+
+                        return (
+                            <button
+                                className={styles.connectButton}
+                                disabled={!triedEager || !!activatingConnector || (connectorsByName[name] === connector) || !!error}
+                                key={name}
+                                onClick={() => {
+                                    // deactivate()
+                                    // setActivatingConnector(connectorsByName[name])
+                                    activate(connectorsByName[name])
+                                    setOpen(false)
+                                }}
+                            >
+                                <Image width={200} height={35} src={`/wallets/${name}.svg`} alt={name} />
+                            </button>
+                        )
+                    })}
+                </div>
             </div>
-        </div>
         </>
     )
 }

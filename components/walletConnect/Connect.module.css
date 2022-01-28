@@ -1,4 +1,4 @@
-.modalContainer{
+.modalContainer {
     display: flex;
     position: fixed;
     width: 100%;
@@ -9,9 +9,10 @@
     left: 0;
     -webkit-backdrop-filter: blur(3px) brightness(0.5);
     backdrop-filter: blur(3px) brightness(0.5);
+    transition: .3s ease;
 }
 
-.modal{
+.modal {
     background: #040713;
     border-radius: 10px;
     border: 2px solid var(--orange);
@@ -23,9 +24,10 @@
     margin: 1rem;
     border: 2px solid #FC1452;
     box-shadow: 0px 0px 40px 0px rgb(252 50 50 / 52%);
+    transition: .3s ease;
 }
 
-.modal_title{
+.modal_title {
     text-align: center;
     color: #FC1452;
     font-family: "Lato", Sans-serif;
@@ -35,7 +37,7 @@
     font-size: 30px;
 }
 
-.connectButton{
+.connectButton {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -47,6 +49,6 @@
     cursor: pointer;
 }
 
-.connectButton:disabled{
+.connectButton:disabled {
     cursor: default;
 }
