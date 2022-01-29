@@ -1,0 +1,213 @@
+.footBlock:hover {
+    /* border: 1px solid #FC1452; */
+    outline: 1px solid #FC1452;
+    box-shadow: 0px 0px 40px 0px rgb(252 50 50 / 52%);
+}
+
+.footBlock {
+    width: 100%;
+    background: #040713;
+    border-radius: 30px;
+    padding: 45px 50px;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+.footBlock_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 38px;
+    width: 100%;
+    max-width: 750px;
+    margin-right: 95px;
+}
+
+.footBlock_content__nav {
+    display: flex;
+    justify-content: flex-start;
+    gap: 25px;
+}
+
+.nav_item {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 23px;
+    text-align: center;
+    color: #FFFFFF;
+    border: 2px solid #FF6208;
+    box-sizing: border-box;
+    border-radius: 18px;
+    padding: 18px 40px;
+    width: 100%;
+    max-width: 233px;
+    height: 200px;
+    position: relative;
+}
+
+.nav_item__content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 29px;
+}
+
+.willQR {
+    font-weight: 300;
+    font-size: 25px;
+    line-height: 29px;
+    color: #FF6208;
+    text-align: center;
+}
+
+.footBlock_content__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.QRContainer {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    height: 300px;
+    max-height: 300px;
+    background: #fff;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.button {
+    width: 100%;
+    height: 60px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Roboto', sans-serif;
+    background: var(--orange);
+    color: var(--white);
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background-image: linear-gradient(137deg, #FF6A00 36%, #FF9C00 60%);
+    cursor: default;
+    box-sizing: border-box;
+    border-radius: 10px;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 34px;
+    line-height: 40px;
+    color: #FFFFFF;
+}
+
+.button__active {
+    cursor: pointer;
+    animation: post 10s ease infinite;
+    background-size: 400% 400%;
+    transition: box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 5px 10px 0px rgb(252 50 50 / 49%);
+}
+
+.button__active:hover {
+    box-shadow: 0px 10px 20px 0px rgb(252 50 50 / 49%);
+}
+
+.button__active:active {
+    transition: none;
+    box-shadow: 0px 5px 10px 0px rgb(252 50 50 / 49%);
+}
+
+@media(max-width: 1200px) {
+    .footBlock {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footBlock_content {
+        margin-right: 0;
+    }
+
+    .nav_item {
+        padding: 18px 25px;
+    }
+}
+
+@media(max-width: 650px) {
+    .nav_item {
+        width: 100%;
+        height: 70px;
+        max-width: none;
+        padding: 9px 15px;
+        border-radius: 10px;
+        font-size: 15px;
+        line-height: 18px;
+    }
+
+    .footBlock {
+        padding: 15px 18px;
+        border-radius: 10px;
+    }
+
+    .footBlock_content__nav {
+        flex-direction: column;
+    }
+
+    .footBlock_content {
+        gap: 15px;
+    }
+
+    .footBlock_content__buttons {
+        gap: 15px;
+    }
+
+    .stakingButtons_body {
+        gap: 15px;
+    }
+
+    .QRContainer {
+        border-radius: 10px;
+    }
+
+    .footBlocks {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: center;
+    }
+
+    .nav_item__content {
+        transform: translate(-50%, -10%);
+    }
+
+    .button {
+        font-size: 27px;
+        line-height: 32px;
+        border-radius: 5px;
+        height: 58px;
+    }
+}
+
+@media(max-width: 400px) {
+    .QRContainer {
+        max-width: 280px;
+        max-height: 280px;
+    }
+}
+
+@media(max-width: 370px) {
+    .button {
+        font-size: 20px;
+        height: auto;
+    }
+}

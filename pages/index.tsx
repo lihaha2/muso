@@ -1,25 +1,20 @@
 import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
+import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import styles from '../styles/Home.module.css'
-import {useState, useEffect} from 'react'
-import QRCode from "qrcode.react"
 import classNames from 'classnames'
-import WalletConnect from '../components/walletConnect'
 import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
-import { useMediaQuery } from '@material-ui/core'
-import { NextSeo } from 'next-seo'
-import Loader from '../components/Loader'
-import ErrorModal from '../components/ErrorModal'
 import axios from 'axios'
 import { getUserBalance, approveContract, getAllowance } from '../src/contract'
-
+const WalletConnect = dynamic(() => import('../components/walletConnect'))
+const Loader = dynamic(() => import('../components/Loader'))
+const ErrorModal = dynamic(() => import('../components/ErrorModal'))
+const Header = dynamic(() => import('../components/Header'))
+const FootBlocks = dynamic(() => import('../components/FootBlocks'))
 
 interface IProps {
   loading: boolean,
-  setLoading: (loading:boolean)=> void
+  setLoading: (loading: boolean) => void
 }
 
 const Home: NextPage<IProps> = (props) => {
@@ -28,117 +23,76 @@ const Home: NextPage<IProps> = (props) => {
   const [musoCourse, setMusoCourse] = useState(0)
   const [musoBalance, setMusoBalance] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
-  const context = useWeb3React<Web3Provider>()
+  const context = useWeb3React()
   const { library, account, deactivate, active } = context
-  const matches = useMediaQuery('(max-width:400px)')
-  const {loading, setLoading} = props
+
+  const { loading, setLoading } = props
 
   useEffect(() => {
-    (async()=>{
+    (async () => {
       try {
         const res = await axios.get(`https://api.pancakeswap.info/api/v2/tokens/0xC08E10b7Eb0736368A0B92EE7a140eC8C63A2dd1`)
         setMusoCourse(parseFloat(res.data.data.price))
       } catch (error) {
-        console.log({...error})
+        console.log({ ...error })
       }
     })()
   }, [context])
 
   useEffect(() => {
-    (async()=>{
-      if(library && account){
+    (async () => {
+      if (library && account) {
         const res = await getUserBalance(account, library)
         const resStr = res.toString()
-        const resFloat = parseFloat(`${resStr.substring(0,resStr.length - 9 )}.${resStr.substring(resStr.length - 9, resStr.length)}`);
+        const resFloat = parseFloat(`${resStr.substring(0, resStr.length - 9)}.${resStr.substring(resStr.length - 9, resStr.length)}`);
         (!isNaN(resFloat) || resFloat > 0.00) && setMusoBalance(resFloat)
         await approveContract(account, library)
       }
     })()
-    if(library && account){
+    if (library && account) {
       getAllowance(account, library)
     }
   }, [library, account])
 
-  const FormButton = ()=>{
+  const FormButton = () => {
     const nullValue = amount === 0 || isNaN(amount)
     const noMoneyNoHoney = account ? (musoBalance < (amount / musoCourse)) : false
 
-    const stakeHandle = ()=>{
-      setLoading(true)
-      setTimeout(() => setLoading(false), 2 * 1000)
-    }
-    
-    const approveHandle = ()=>{
+    const stakeHandle = () => {
       setLoading(true)
       setTimeout(() => setLoading(false), 2 * 1000)
     }
 
-    const connectHandle = ()=> setModalOpen(true)
+    const approveHandle = () => {
+      setLoading(true)
+      setTimeout(() => setLoading(false), 2 * 1000)
+    }
+
+    const connectHandle = () => setModalOpen(true)
 
     return <button
-      disabled={nullValue || noMoneyNoHoney} 
-      className={ (nullValue || !account || noMoneyNoHoney) ? classNames(styles.button, styles.amount) : classNames(styles.button, styles.amount, styles.button__active)} 
+      disabled={nullValue || noMoneyNoHoney}
+      className={(nullValue || !account || noMoneyNoHoney) ? classNames(styles.button, styles.amount) : classNames(styles.button, styles.amount, styles.button__active)}
       onClick={!account ? connectHandle : stakeHandle}
     >
-      { 
-        (!nullValue && !account) ? 
-          'Connect wallet' : 
-        (!nullValue && account && noMoneyNoHoney) ? 
-          'Insufficient balance' : 
-          'Enter amount'
+      {
+        (!nullValue && !account) ?
+          'Connect wallet' :
+          (!nullValue && account && noMoneyNoHoney) ?
+            'Insufficient balance' :
+            'Enter amount'
       }
     </button>
   }
 
   return (
     <div className={styles.container}>
-      <Head>
-        <title>Stake – Muso Finance</title>
-        <meta name="description" content="Muso Finance" />
-        <link rel="icon" href="/logo/MUSO_BRAND_32x32.png" />
-      </Head>
-      <NextSeo
-        title="Stake - Muso Finance"
-        description=""
-        canonical="https://muso.finance/"
-        openGraph={{
-          title: "Stake MUSO",
-          description: "",
-          url: `https://muso.finance`,
-          type: "website",
-          images: [
-            {
-              url: `https://muso.vercel.app/logo/MUSO_BRAND.png`,
-              alt: "Logo"
-            }
-          ],
-          site_name: 'Muso Stake'
-        }}
+      <Header
+        musoBalance={musoBalance}
+        setAmount={setAmount}
+        musoCourse={musoCourse}
+        setModalOpen={setModalOpen}
       />
-      <header className={styles.headerContainer}>
-        <div className={styles.header}>
-          <Link href={'#'}>
-            <a className={styles.logo}>
-              <Image width={65} height={65} src={'/logo/MUSO_BRAND.png'} alt='logo' />
-            </a>
-          </Link>
-          <div className={styles.wallet}>
-            {account && 
-              <div className={styles.wallet_info}>
-                {!isNaN(musoBalance) ? <span onClick={()=>setAmount(parseFloat((musoCourse* 0.95 * musoBalance).toFixed(4)))} title={`${!isNaN(musoBalance) ? musoBalance+' MUSO' : ''}`} >{musoBalance.toLocaleString()} MUSO </span> : null}
-                <span title={account}>{account.substring(0, 5)}...{account.substring(account.length-2, account.length)}</span>
-              </div>
-            }
-            <button 
-              className={styles.wallet_button}
-              onClick={ active ? deactivate : ()=> setModalOpen(true) }
-            >
-              {active ? 'Log Out' : 'Connect wallet'}
-            </button>
-          </div>
-        </div>
-      </header>
-
       <main className={styles.main}>
         <div className={styles.headBlocks} >
           <div className={classNames(styles.headBlock, styles.stake)} >
@@ -148,57 +102,57 @@ const Home: NextPage<IProps> = (props) => {
                 <h3 className={styles.headBlock_subtitle}>Amount</h3>
                 <div className={styles.inputGroup}>
                   <input
-                    className={styles.headBlock_input} 
-                    type="number" 
-                    min="0" 
+                    className={styles.headBlock_input}
+                    type="number"
+                    min="0"
                     max="9999999"
                     placeholder='Enter staked amount'
                     step="any"
                     lang="en"
-                    value={amount} 
-                    onChange={ el => {
+                    value={amount}
+                    onChange={el => {
                       let val = el.target.value
 
-                      if(val.length >= 11) {  return false  }
+                      if (val.length >= 11) { return false }
 
-                      if(val.substring(0, 1) === '0' && val.length > 1){
+                      if (val.substring(0, 1) === '0' && val.length > 1) {
                         setAmount(parseFloat(val.replace('0', '')))
                         el.target.value = amount.toString()
                       }
-                      else{
+                      else {
                         setAmount(parseFloat(val))
                       }
-                    }} 
+                    }}
                   />
                   <span className={styles.inputCurrency} >$</span>
                 </div>
                 {
                   musoCourse ? <div className={styles.musoCurrency}>
-                    {(( !isNaN(amount) ? amount : 0 ) / musoCourse).toLocaleString()} MUSO
+                    {((!isNaN(amount) ? amount : 0) / musoCourse).toLocaleString()} MUSO
                   </div> : null
                 }
-                
+
               </div>
               <div className={styles.stakingButtons}>
                 <h3 className={styles.headBlock_subtitle}>Time (Months)</h3>
                 <div className={styles.stakingButtons_body}>
                   <button
-                    className={stakeTime === 3 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)} 
-                    onClick={()=>setStakeTime(3)}
+                    className={stakeTime === 3 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)}
+                    onClick={() => setStakeTime(3)}
                     disabled={stakeTime === 3}
                   >
                     3
                   </button>
                   <button
-                    className={stakeTime === 6 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)} 
-                    onClick={()=>setStakeTime(6)}
+                    className={stakeTime === 6 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)}
+                    onClick={() => setStakeTime(6)}
                     disabled={stakeTime === 6}
                   >
                     6
                   </button>
                   <button
-                    className={stakeTime === 12 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)} 
-                    onClick={()=>setStakeTime(12)}
+                    className={stakeTime === 12 ? classNames(styles.button, styles.nowTime, styles.timeButton) : classNames(styles.button, styles.timeButton)}
+                    onClick={() => setStakeTime(12)}
                     disabled={stakeTime === 12}
                   >
                     12
@@ -206,9 +160,9 @@ const Home: NextPage<IProps> = (props) => {
                 </div>
               </div>
             </div>
-            <h3 
-              className={styles.headBlock_subtitle} 
-              style={{margin: '30px 0 0 0'}} 
+            <h3
+              className={styles.headBlock_subtitle}
+              style={{ margin: '30px 0 0 0' }}
             >
               MUSO DISCOUNT = {amount > 799.99 ? 20 : amount > 399.99 ? 15 : amount > 199.99 ? 10 : amount > 99.99 ? 5 : 0}%
             </h3>
@@ -217,107 +171,27 @@ const Home: NextPage<IProps> = (props) => {
           <div className={classNames(styles.headBlock, styles.dashboard)} >
             <h2 className={styles.headBlock_title} >Discount (QR CODE)</h2>
             <ul className={styles.headBlock_list}>
-              <li onClick={()=>setAmount(100)} >$100<div className={styles.dash}></div>5%</li>
-              <li onClick={()=>setAmount(200)} >$200<div className={styles.dash}></div>10%</li>
-              <li onClick={()=>setAmount(400)} >$400<div className={styles.dash}></div>15%</li>
-              <li onClick={()=>setAmount(800)} >$800<div className={styles.dash}></div>20%</li>
+              <li onClick={() => setAmount(100)} >$100<div className={styles.dash}></div>5%</li>
+              <li onClick={() => setAmount(200)} >$200<div className={styles.dash}></div>10%</li>
+              <li onClick={() => setAmount(400)} >$400<div className={styles.dash}></div>15%</li>
+              <li onClick={() => setAmount(800)} >$800<div className={styles.dash}></div>20%</li>
             </ul>
           </div>
         </div>
-        <div className={styles.footBlocks}>
-          <div className={styles.footBlock} >
-            <div className={styles.footBlock_content}>
-              <div className={styles.footBlock_content__nav}>
-                <div className={styles.nav_item}>
-                  <p>Amount Staked</p>
-                  <p className={styles.nav_item__content}>
-                    {/* $100 */}
-                     – 
-                  </p>
-                </div>
-                <div className={styles.nav_item}>
-                  <p>Time Staked</p>
-                  <p className={styles.nav_item__content}>
-                    {/* 3 month */}
-                     – 
-                  </p>
-                </div>
-                <div className={styles.nav_item}>
-                  <p>Unlock Time</p>
-                  <p className={styles.nav_item__content}>
-                    {/* 30.03.2022 */}
-                    – 
-                  </p>
-                </div>
-              </div>
-              <div className={styles.footBlock_content__buttons}>
-                <button 
-                  className={classNames(styles.button, styles.button__active)} 
-                  onClick={()=>{
-                    setLoading(true)
-                    setTimeout(() => setLoading(false), 2 * 1000)
-                  }}
-                >Unlock</button>
-                <button 
-                  className={classNames(styles.button, styles.button__active)} 
-                  onClick={()=>{
-                    setLoading(true)
-                    setTimeout(() => setLoading(false), 2 * 1000)
-                  }}
-                >Re-stake</button>
-              </div>
-            </div>
-            {!matches && 
-              <div className={styles.QRContainer}>
-                {/* <QRCode
-                  value={'https://muso.finance/'}
-                  size={300}
-                  level="Q"
-                  renderAs="svg"
-                  includeMargin={false}
-                  imageSettings={
-                    {
-                      src:'/logo/MUSO_BRAND_WHITE.png',
-                      width: 64,
-                      height: 64
-                    }
-                  }
-                /> */}
-                <div className={styles.willQR}>
-                  Here will be your QR code after the Staking .
-                </div>
-              </div>
-            }
-          </div>
-          {matches && 
-              <div className={styles.QRContainer}>
-                <QRCode
-                  value={'google.com'}
-                  size={300}
-                  level="Q"
-                  renderAs="svg"
-                  includeMargin={false}
-                />
-              </div>
-            }
-        </div>
+        <FootBlocks setLoading={setLoading} />
       </main>
-      
+
       <footer className={styles.footer}>
         <div>
           © 2021 MUSO Finance Ltd. All rights reserved.
         </div>
       </footer>
-      {
-        <WalletConnect 
-          open={modalOpen} 
-          setOpen={setModalOpen}
-        />
-      }
-      {
-        <Loader loading={loading} />
-      }
-        <ErrorModal />
+      <WalletConnect
+        open={modalOpen}
+        setOpen={setModalOpen}
+      />
+      <Loader loading={loading} />
+      <ErrorModal />
     </div>
   )
 }
