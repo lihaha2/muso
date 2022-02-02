@@ -37,3 +37,26 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.MuiCircularProgress-determinate:after {
+  display: block;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* border-radius: 50%; */
+    -webkit-border-radius: 50%;
+    /* outline: 1px solid #FC1452; */
+    box-shadow: inset 0px 0px 40px 0px rgb(252 50 50 / 52%);
+}
+
+/* @keyframes circular-rotate {
+  0% {
+    background: linear-gradient(90deg,#ffd33d,#ea4aaa 17%,#b34bff 34%,#01feff 51%,#ffd33d 68%,#ea4aaa 85%,#b34bff);
+  }
+  100% {
+    background: linear-gradient(180deg,#ffd33d,#ea4aaa 17%,#b34bff 34%,#01feff 51%,#ffd33d 68%,#ea4aaa 85%,#b34bff);
+  }
+} */
