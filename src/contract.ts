@@ -52,7 +52,7 @@ const _getAllowance = async(buyer, provider, monthAddress)=> {
     }
 }
 
-export const _approveContract = async(buyer, provider, monthAddress)=> {
+const _approveContract = async(buyer, provider, monthAddress)=> {
     const tokenContract = _Contract(buyer, provider, tokenAddress, tokenabi)
     try {
         const res = await tokenContract.approve(monthAddress, monthAddress)
@@ -82,12 +82,6 @@ export const stake = async({buyer, provider, amount, time, setStaked, setStakePr
                 return error
             }
         }
-        // try {
-        //     let jopa = await threeContract.userDataMapping(buyer)
-        //     console.log('jopa', jopa.expiration.toString())
-        // } catch (error) {
-        //     console.log('gasLimit',error)
-        // }
         
         try {
             const contractAllowance = await _getAllowance(buyer, provider, monthAddress)
@@ -182,4 +176,99 @@ export const stake = async({buyer, provider, amount, time, setStaked, setStakePr
             console.log('stake error')
             break;
     }
+}
+
+export const getUserStakes = async(buyer, provider)=>{
+    const threeContract = _Contract(buyer, provider, threeMonthsAddress, threeMonthsAbi)
+    const sixContract = _Contract(buyer, provider, sixMonthsAddress, sixMonthsAbi)
+    const twelveContract = _Contract(buyer, provider, twelveMonthsAddress, twelveMonthsAbi)
+    try {
+        let three = await threeContract.userDataMapping(buyer)
+        let six = await sixContract.userDataMapping(buyer)
+        let twelve = await twelveContract.userDataMapping(buyer)
+        const tokenDecimals = await _decimals(buyer, provider)
+        
+        return [
+            {
+                amount: parseFloat(ethers.utils.formatUnits(three.balance, tokenDecimals)),
+                time: 3,
+                unlockTime: new Date((three.expiration.toNumber())*1000),
+                bigAmount: three.balance
+            },
+            {
+                amount: parseFloat(ethers.utils.formatUnits(six.balance, tokenDecimals)),
+                time: 6,
+                unlockTime: new Date((six.expiration.toNumber())*1000),
+                bigAmount: six.balance
+            },
+            {
+                amount: parseFloat(ethers.utils.formatUnits(twelve.balance, tokenDecimals)),
+                time: 12,
+                unlockTime: new Date((twelve.expiration.toNumber())*1000),
+                bigAmount: twelve.balance
+            },
+        ]
+    } catch (error) {
+        console.log('getUserStakes', error)
+    }
+}
+
+export const getEarned = async(buyer, provider)=>{
+    const threeContract = _Contract(buyer, provider, threeMonthsAddress, threeMonthsAbi)
+    const sixContract = _Contract(buyer, provider, sixMonthsAddress, sixMonthsAbi)
+    const twelveContract = _Contract(buyer, provider, twelveMonthsAddress, twelveMonthsAbi)
+    try {
+        const tokenDecimals = await _decimals(buyer, provider)
+        const threeEarned = await threeContract.earned(buyer)
+        const sixEarned = await sixContract.earned(buyer)
+        const twelveEarned = await twelveContract.earned(buyer)
+        return [
+            ethers.utils.formatUnits(threeEarned, tokenDecimals), 
+            ethers.utils.formatUnits(sixEarned, tokenDecimals), 
+            ethers.utils.formatUnits(twelveEarned, tokenDecimals)
+        ]
+    } catch (error) {
+        console.log('getEarned', error)
+        return false
+    }
+}
+
+export const withdraw = async(buyer, provider, time, amount)=>{
+    // const threeContract = _Contract(buyer, provider, threeMonthsAddress, threeMonthsAbi)
+    // const sixContract = _Contract(buyer, provider, sixMonthsAddress, sixMonthsAbi)
+    const twelveContract = _Contract(buyer, provider, tokenAddress, tokenabi)
+    try {
+        let res = await twelveContract.withdraw(4753883598938090)
+        console.log(res)
+    } catch (error) {
+        console.log(error)
+    }
+    // const monthWithdraw = async(monthContract)=>{
+    //     try {
+    //         const tokenDecimals = await _decimals(buyer, provider)
+    //         const stakeAmount = ethers.utils.parseUnits(''+amount, tokenDecimals)
+    //         const res = await monthContract.withdraw(amount)
+    //         console.log('monthWithdraw', res)
+    //     } catch (error) {
+    //         console.log('withdraw', error)
+    //         return false
+    //     }
+    // }
+
+    // switch (time) {
+    //     case 3:
+    //         monthWithdraw(threeContract)
+    //         break;
+    
+    //     case 6:
+    //         monthWithdraw(sixContract)
+    //         break;
+    
+    //     case 12:
+    //         monthWithdraw(twelveContract)
+    //         break;
+    
+    //     default:
+    //         break;
+    // }
 }

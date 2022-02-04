@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 import classNames from 'classnames'
 import { useWeb3React } from '@web3-react/core'
 import axios from 'axios'
-import { getUserBalance, stake } from '../src/contract'
+import { getUserBalance, stake, getEarned } from '../src/contract'
 const WalletConnect = dynamic(() => import('../components/walletConnect'))
 const Loader = dynamic(() => import('../components/Loader'))
 const ErrorModal = dynamic(() => import('../components/ErrorModal'))
@@ -48,7 +48,6 @@ const Home: NextPage<IProps> = (props) => {
   useEffect(() => {
     (async()=>{
       if(staked.progress === 100){
-        staked.staked ? console.log('staked', staked) : console.log('stake error', staked);
         const res = await getUserBalance({buyer:account, provider: library});
         !isNaN(res) && setMusoBalance(res)
         setLoading(false)
@@ -71,7 +70,8 @@ const Home: NextPage<IProps> = (props) => {
       if (library && account) {
         const res = await getUserBalance({buyer:account, provider: library});
         (!isNaN(res) || res > 0.00) && setMusoBalance(res)
-        // approveContract(account, library)
+        const earned = await getEarned(account, library)
+        console.log(earned)
       }
     })()
   }, [library, account])
@@ -203,7 +203,7 @@ const Home: NextPage<IProps> = (props) => {
             </ul>
           </div>
         </div>
-        <FootBlocks setLoading={setLoading} />
+        <FootBlocks setLoading={setLoading} musoCourse={musoCourse} />
       </main>
 
       <footer className={styles.footer}>
