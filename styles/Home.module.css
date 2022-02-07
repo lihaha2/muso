@@ -368,6 +368,7 @@
     cursor: pointer;
     background: transparent;
     border: 2px solid var(--orange);
+    height: 68px;
 }
 
 .nowTime{
@@ -421,6 +422,7 @@
     .footBlock_content__nav{
         flex-direction: column;
     }
+    
     .nav_item{
         width: 100%;
         height: 70px;
@@ -501,6 +503,9 @@
 
     .wallet_button, .wallet_info{
         font-size: 14px;
+    }
+    .timeButton{
+        height: 64px;
     }
 }
 
