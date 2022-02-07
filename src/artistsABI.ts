@@ -1,6 +1,6 @@
 
 type TokenABI = any[]
-export const artistsMonthsAddress:string = '0x389804C19fDf2b7E63e296316fBE911Bb762A1BD'
+export const artistsMonthsAddress:string = '0x8724bd42a18346bd772145B61acD11c38F8da805'
 export const artistsMonthsAbi:TokenABI = [
 	{
 		"inputs": [
@@ -45,24 +45,16 @@ export const artistsMonthsAbi:TokenABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "balance",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "address",
 				"name": "account",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "count",
+				"type": "uint256"
 			}
 		],
 		"name": "earned",
@@ -77,7 +69,78 @@ export const artistsMonthsAbi:TokenABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "getAllBalancesForOnePerson",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_addr",
+				"type": "address"
+			}
+		],
+		"name": "getAllStakes",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "balance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dateOfStart",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expiration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "userRewardPerTokenPaid",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct StakingArtist.userData[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "which",
+				"type": "uint256"
+			}
+		],
 		"name": "getReward",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -96,7 +159,7 @@ export const artistsMonthsAbi:TokenABI = [
 				"type": "uint256"
 			}
 		],
-		"name": "getTaxesThree",
+		"name": "getTaxesArtist",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -112,6 +175,24 @@ export const artistsMonthsAbi:TokenABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "count",
+				"type": "uint256"
+			}
+		],
+		"name": "reStake",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -159,6 +240,11 @@ export const artistsMonthsAbi:TokenABI = [
 				"internalType": "uint256",
 				"name": "_amount",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "count",
+				"type": "uint256"
 			}
 		],
 		"name": "stake",
@@ -182,8 +268,57 @@ export const artistsMonthsAbi:TokenABI = [
 	{
 		"inputs": [
 			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "userDataMapping",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "balance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "dateOfStart",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "expiration",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "reward",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "userRewardPerTokenPaid",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "which",
 				"type": "uint256"
 			}
 		],

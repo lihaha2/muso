@@ -1,7 +1,7 @@
 .footBlock:hover {
     /* border: 1px solid #FC1452; */
-    outline: 1px solid #FC1452;
-    box-shadow: 0px 0px 40px 0px rgb(252 50 50 / 52%);
+    outline: 1px solid var(--orange);
+    box-shadow: 0px 0px 40px 0px rgb(248, 104, 31, 52%);
 }
 
 .footBlock {
@@ -32,14 +32,14 @@
 }
 
 .nav_item {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 20px;
     line-height: 23px;
     text-align: center;
     color: #FFFFFF;
-    border: 2px solid #FF6208;
+    border: 2px solid var(--orange);
     box-sizing: border-box;
     border-radius: 18px;
     padding: 18px 0px;
@@ -57,11 +57,12 @@
     font-weight: 300;
     font-size: 25px;
     line-height: 29px;
-    cursor: pointer
+    cursor: pointer;
+    padding: 5px;
 }
 
 .nav_item__content__hover {
-    background: rgba(255, 106, 0, 0.7);
+    background: #ff6a00b3;
 }
 
 .nav_item__content__active {
@@ -82,7 +83,7 @@
     font-weight: 300;
     font-size: 25px;
     line-height: 29px;
-    color: #FF6208;
+    color: var(--orange);
     text-align: center;
 }
 
@@ -111,40 +112,41 @@
     height: 60px;
     font-size: 14px;
     font-weight: 500;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: var(--orange);
     color: var(--white);
     padding: 0.5rem;
     border: none;
     outline: none;
     cursor: pointer;
-    background-image: linear-gradient(137deg, #FF6A00 36%, #FF9C00 60%);
+    background-color: #ff8344;
     cursor: default;
     box-sizing: border-box;
     border-radius: 10px;
-    font-family: Roboto;
     font-style: normal;
     font-weight: 500;
     font-size: 34px;
     line-height: 40px;
     color: #FFFFFF;
+    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
 }
 
 .button__active {
     cursor: pointer;
     animation: post 10s ease infinite;
+    background-color: var(--orange);
     background-size: 400% 400%;
-    transition: box-shadow 0.3s ease-in-out;
-    box-shadow: 0px 5px 10px 0px rgb(252 50 50 / 49%);
+    transition: box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    box-shadow: 0px 5px 10px 0px rgb(248, 104, 31, 49%);
 }
 
 .button__active:hover {
-    box-shadow: 0px 10px 20px 0px rgb(252 50 50 / 49%);
+    box-shadow: 0px 10px 20px 0px rgb(248, 104, 31, 49%);
 }
 
 .button__active:active {
     transition: none;
-    box-shadow: 0px 5px 10px 0px rgb(252 50 50 / 49%);
+    box-shadow: 0px 5px 10px 0px rgb(248, 104, 31, 49%);
 }
 
 @media(max-width: 1200px) {

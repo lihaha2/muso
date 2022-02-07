@@ -24,15 +24,14 @@ const Loader = ({ loading, className, process }: ILoader) => (
                     </Fab>
                     <CircularProgress
                         variant="determinate"
-                        disableShrink
                         thickness={2}
                         value={process.val}
                         size={150}
                         sx={{
-                            color: '#FC1452',
+                            color: 'var(--orange)',
                             position: 'absolute',
                             zIndex: 1,
-                            boxShadow: '0px 0px 40px 0px rgb(252 50 50 / 52%)',
+                            boxShadow: '0px 0px 40px 0px rgb(248, 104, 31, 52%)',
                             borderRadius: '50%',
                         }}
                     />

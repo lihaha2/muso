@@ -55,6 +55,7 @@ const Home: NextPage<IProps> = (props) => {
           val:0,
           message: ''
         })
+        console.log(staked)
         setStaked({
           err: false,
           staked: false,
@@ -70,8 +71,8 @@ const Home: NextPage<IProps> = (props) => {
       if (library && account) {
         const res = await getUserBalance({buyer:account, provider: library});
         (!isNaN(res) || res > 0.00) && setMusoBalance(res)
-        const earned = await getEarned(account, library)
-        console.log(earned)
+        // const earned = await getEarned(account, library)
+        // console.log(earned)
       }
     })()
   }, [library, account])
@@ -203,7 +204,14 @@ const Home: NextPage<IProps> = (props) => {
             </ul>
           </div>
         </div>
-        <FootBlocks setLoading={setLoading} musoCourse={musoCourse} />
+        <FootBlocks 
+          stakeProcess={stakeProcess} 
+          setLoading={setLoading} 
+          musoCourse={musoCourse}
+          staked={staked} 
+          setStaked={setStaked}
+          setStakeProcess={setStakeProcess}
+        />
       </main>
 
       <footer className={styles.footer}>

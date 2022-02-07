@@ -3,34 +3,51 @@ import styles from './footBlocks.module.css'
 import QRCode from "qrcode.react"
 import { useMediaQuery } from '@material-ui/core'
 import { useWeb3React } from '@web3-react/core'
-import { getUserStakes, withdraw } from '../../src/contract'
+import { getUserStakes, reStake, getReward } from '../../src/contract'
 import { useEffect, useState } from 'react'
-const FootBlocks = ({ setLoading, musoCourse }) => {
+const FootBlocks = (props) => {
+    const { setLoading, musoCourse, stakeProcess, staked, setStaked, setStakeProcess } = props
     const matches = useMediaQuery('(max-width:400px)')
     const context = useWeb3React()
     const { library, account, deactivate, active } = context
     const [stakes, setStakes] = useState([])
     const [hoverStake, setHoverStake] = useState(-1)
-    const [activeStake, setActiveStake] = useState({
+    const [activeStake, setActiveStake] = useState<any>({
         key: -1,
         stake:{}
     })
     useEffect(() => {
         (async () => {
-            if (account) {
+            if (account || (stakeProcess.val === 99)) {
                 const res = await getUserStakes(account, library)
                 console.log(res.filter(el => el.amount > 0))
                 setStakes(res.filter(el => el.amount > 0))
             }
         })()
-    }, [account])
+    }, [account, stakeProcess])
 
-    const getReward = async() => {
-        setLoading(true)
-        const { time, bigAmount }:any = activeStake.stake
-        console.log(activeStake)
-        // await withdraw(account, library, time, bigAmount)
-        setTimeout(() => setLoading(false), 2 * 1000)
+    const getRewardHandle = async() => {
+        const {time, key} = activeStake.stake 
+        await getReward({
+            buyer:account, 
+            provider:library,
+            key,
+            time,
+            setStaked,
+            setStakeProcess
+        })
+    }
+    
+    const reStakeHandle = async() => {
+        const {time, key} = activeStake.stake 
+        await reStake({
+            buyer:account, 
+            provider:library,
+            key: key,
+            time: time,
+            setStaked,
+            setStakeProcess
+        })
     }
     return (
         <div className={styles.footBlocks}>
@@ -38,17 +55,17 @@ const FootBlocks = ({ setLoading, musoCourse }) => {
                 <div className={styles.footBlock_content}>
                     {
                         account && stakes.length > 0 ?
-                            <div className={styles.footBlock_content__nav}>
-                                <div 
-                                    className={styles.nav_item} 
-                                    onClick={()=>{
-                                        setHoverStake(-1)
-                                        setActiveStake({
-                                            key: -1,
-                                            stake:{}
-                                        })
-                                    }}
-                                >
+                            <div 
+                                className={styles.footBlock_content__nav}
+                                onClick={()=>{
+                                    setHoverStake(-1)
+                                    setActiveStake({
+                                        key: -1,
+                                        stake:{}
+                                    })
+                                }}
+                            >
+                                <div className={styles.nav_item}>
                                     <p>Amount Staked</p>
                                     <div 
                                         className={styles.nav_item__container} 
@@ -182,15 +199,12 @@ const FootBlocks = ({ setLoading, musoCourse }) => {
                         <button
                             className={classNames(styles.button, activeStake.key !== -1 && styles.button__active)}
                             disabled={activeStake.key == -1}
-                            onClick={getReward}
+                            onClick={getRewardHandle}
                         >Unlock</button>
                         <button
                             className={classNames(styles.button, activeStake.key !== -1 && styles.button__active)}
                             disabled={activeStake.key == -1}
-                            onClick={() => {
-                                setLoading(true)
-                                setTimeout(() => setLoading(false), 2 * 1000)
-                            }}
+                            onClick={reStakeHandle}
                         >Re-stake</button>
                     </div>
                 </div>

@@ -42,3 +42,12 @@ export interface IStake {
     setStaked: Dispatch<SetStateAction<IStaked>>, 
     setStakeProcess: Dispatch<SetStateAction<ILoadingProgress>>
 }
+
+export interface IReStake {
+    buyer: string,
+    provider: any, 
+    key: number, 
+    time: 3 | 6 | 12, 
+    setStaked: Dispatch<SetStateAction<IStaked>>, 
+    setStakeProcess: Dispatch<SetStateAction<ILoadingProgress>>
+}

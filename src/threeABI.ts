@@ -1,6 +1,6 @@
 
 type TokenABI = any[]
-export const threeMonthsAddress:string = '0x270Dec1b8e9Dc44d489Bb327753907e9B54E73e4'
+export const threeMonthsAddress:string = '0xFFe1e6A2220c43BdCf28363945E014D6b5EF61E0'
 export const threeMonthsAbi:TokenABI = [
 	{
 		"inputs": [
@@ -50,6 +50,11 @@ export const threeMonthsAbi:TokenABI = [
 				"internalType": "address",
 				"name": "account",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "count",
+				"type": "uint256"
 			}
 		],
 		"name": "earned",
@@ -64,7 +69,78 @@ export const threeMonthsAbi:TokenABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			}
+		],
+		"name": "getAllBalancesForOnePerson",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_addr",
+				"type": "address"
+			}
+		],
+		"name": "getAllStakes",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "balance",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "dateOfStart",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expiration",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "reward",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "userRewardPerTokenPaid",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct StakingThreeMonths.userData[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "which",
+				"type": "uint256"
+			}
+		],
 		"name": "getReward",
 		"outputs": [],
 		"stateMutability": "nonpayable",
@@ -99,6 +175,24 @@ export const threeMonthsAbi:TokenABI = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_account",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "count",
+				"type": "uint256"
+			}
+		],
+		"name": "reStake",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -146,6 +240,11 @@ export const threeMonthsAbi:TokenABI = [
 				"internalType": "uint256",
 				"name": "_amount",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "count",
+				"type": "uint256"
 			}
 		],
 		"name": "stake",
@@ -172,6 +271,11 @@ export const threeMonthsAbi:TokenABI = [
 				"internalType": "address",
 				"name": "",
 				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"name": "userDataMapping",
@@ -210,6 +314,11 @@ export const threeMonthsAbi:TokenABI = [
 			{
 				"internalType": "uint256",
 				"name": "_amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "which",
 				"type": "uint256"
 			}
 		],
