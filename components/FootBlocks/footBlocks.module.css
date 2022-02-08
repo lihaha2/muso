@@ -110,16 +110,12 @@
 .button {
     width: 100%;
     height: 60px;
-    font-size: 14px;
-    font-weight: 500;
     font-family: 'Poppins', sans-serif;
-    background: var(--orange);
     color: var(--white);
     padding: 0.5rem;
     border: none;
     outline: none;
-    cursor: pointer;
-    background-color: #ff8344;
+    background-color: #f8681f8f;
     cursor: default;
     box-sizing: border-box;
     border-radius: 10px;

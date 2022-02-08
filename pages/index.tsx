@@ -5,7 +5,7 @@ import styles from '../styles/Home.module.css'
 import classNames from 'classnames'
 import { useWeb3React } from '@web3-react/core'
 import axios from 'axios'
-import { getUserBalance, stake, getEarned } from '../src/contract'
+import { getUserBalance, stake } from '../src/contract'
 const WalletConnect = dynamic(() => import('../components/walletConnect'))
 const Loader = dynamic(() => import('../components/Loader'))
 const ErrorModal = dynamic(() => import('../components/ErrorModal'))
@@ -55,7 +55,6 @@ const Home: NextPage<IProps> = (props) => {
           val:0,
           message: ''
         })
-        console.log(staked)
         setStaked({
           err: false,
           staked: false,
@@ -67,14 +66,14 @@ const Home: NextPage<IProps> = (props) => {
   }, [staked])
 
   useEffect(() => {
-    (async () => {
+    let getBalanceInterval = setInterval(() => {
       if (library && account) {
-        const res = await getUserBalance({buyer:account, provider: library});
-        (!isNaN(res) || res > 0.00) && setMusoBalance(res)
-        // const earned = await getEarned(account, library)
-        // console.log(earned)
+        getUserBalance({buyer:account, provider: library})
+        .then(res=>((!isNaN(res) || res > 0.00) && res !== musoBalance) && setMusoBalance(res))
+        .catch(err=> console.error(err))
       }
-    })()
+     }, 1000)
+    return ()=>clearInterval(getBalanceInterval)
   }, [library, account])
 
   const FormButton = () => {

@@ -120,7 +120,7 @@
     width: 100%;
     background: transparent;
     color: var(--white);
-    padding: 19px 20px 15px 20px;
+    padding: 17px 20px 17px 20px;
     outline: none;
     border: 2px solid var(--orange);
     box-sizing: border-box;
@@ -162,16 +162,12 @@
 .button{
     width: 100%;
     height: 60px;
-    font-size: 14px;
-    font-weight: 500;
     font-family: 'Poppins', sans-serif;
-    background: var(--orange);
+    background: #f8681f8f;
     color: var(--white);
     padding: 0.5rem;
     border: none;
     outline: none;
-    cursor: pointer;
-    background-image: linear-gradient(137deg, var(--orange) 36%, #FF9C00 60%);
     cursor: default;
     box-sizing: border-box;
     border-radius: 10px;
@@ -180,12 +176,12 @@
     font-size: 34px;
     line-height: 40px;
     color: #FFFFFF;
+    transition: box-shadow 0.3s ease-in-out;
 }
 
 .button__active{
     cursor: pointer;
-    animation: post 10s ease infinite;
-    background-size: 400% 400%;
+    background: var(--orange);
     transition: box-shadow 0.3s ease-in-out;
     box-shadow: 0px 5px 10px 0px rgb(248, 104, 31, 49%);
 }
@@ -455,7 +451,7 @@
         padding: 24px 18px;
     }
     .headBlock_input{
-        padding: 20.5px 45px 16.5px 20px;
+        padding: 18.5px 45px 18.5px 20px;
         font-size: 15px;
         line-height: 15px;
     }

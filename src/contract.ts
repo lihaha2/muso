@@ -62,7 +62,6 @@ const _approveContract = async (buyer, provider, monthAddress) => {
     const tokenContract = _Contract(buyer, provider, tokenAddress, tokenabi)
     try {
         const res = await tokenContract.approve(monthAddress, monthAddress)
-        console.log('approve res', res)
         return res
     }
     catch (err) {
@@ -117,7 +116,6 @@ export const stake = async ({ buyer, provider, amount, time, setStaked, setStake
             })
         } else {
             const monthApprove = await _approveContract(buyer, provider, contractType[time].addr)
-            console.log(monthApprove)
             !!monthApprove && setStakeProcess({
                 val: 50,
                 message: 'Approving contract'
@@ -173,7 +171,6 @@ export const getUserStakes = async (buyer, provider): Promise<any[]> => {
         let six = await sixContract.getAllStakes(buyer)
         let twelve = await twelveContract.getAllStakes(buyer)
         const tokenDecimals = await _decimals(buyer, provider)
-        console.log('getUserStakes', three, six, twelve)
         const monthReturn = (monthFunc, time) => monthFunc.map((el, key) => {
             return {
                 amount: parseFloat(ethers.utils.formatUnits(el.balance, tokenDecimals)),
@@ -234,7 +231,6 @@ export const getReward = async ({buyer, provider, key, time, setStaked, setStake
             message: 'Waiting for reward'
         })
         provider.once(res.hash, res => {
-            console.log('stake.hash', res)
             setStakeProcess({
                 val: 99,
                 message: 'Success!'
@@ -247,7 +243,6 @@ export const getReward = async ({buyer, provider, key, time, setStaked, setStake
                 trantaction: stake
             })
         })
-        console.log('getReward', res)
     } catch (error) {
         console.log('getReward', error)
         setStaked({
@@ -301,7 +296,6 @@ export const reStake = async ({ buyer, provider, key, time, setStaked, setStakeP
             message: 'Transaction in process'
         })
         provider.once(stake.hash, res => {
-            console.log('stake.hash', res)
             setStakeProcess({
                 val: 99,
                 message: 'Staked!'

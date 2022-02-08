@@ -5,11 +5,12 @@ import { useMediaQuery } from '@material-ui/core'
 import { useWeb3React } from '@web3-react/core'
 import { getUserStakes, reStake, getReward } from '../../src/contract'
 import { useEffect, useState } from 'react'
+
 const FootBlocks = (props) => {
-    const { setLoading, musoCourse, stakeProcess, staked, setStaked, setStakeProcess } = props
+    const { musoCourse, stakeProcess, setStaked, setStakeProcess } = props
     const matches = useMediaQuery('(max-width:400px)')
     const context = useWeb3React()
-    const { library, account, deactivate, active } = context
+    const { library, account, active } = context
     const [stakes, setStakes] = useState([])
     const [hoverStake, setHoverStake] = useState(-1)
     const [activeStake, setActiveStake] = useState<any>({
@@ -20,11 +21,20 @@ const FootBlocks = (props) => {
         (async () => {
             if (account || (stakeProcess.val === 99)) {
                 const res = await getUserStakes(account, library)
-                console.log(res.filter(el => el.amount > 0))
                 setStakes(res.filter(el => el.amount > 0))
             }
         })()
     }, [account, stakeProcess])
+
+    useEffect(() => {
+        if(!active){
+            setActiveStake({
+                key: -1,
+                stake:{}
+            })
+            setHoverStake(-1)
+        } 
+    }, [active])
 
     const getRewardHandle = async() => {
         const {time, key} = activeStake.stake 

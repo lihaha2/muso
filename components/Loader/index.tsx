@@ -7,7 +7,6 @@ import Fab from '@mui/material/Fab'
 import CircularProgress from '@mui/material/CircularProgress';
 import { ILoader } from '../../src/types'
 
-
 const Loader = ({ loading, className, process }: ILoader) => (
     <div style={(loading || process?.val > 0) ? { display: 'flex', overflow: 'hidden' } : { display: 'none' }} className={classNames(styles.preloaderWrapper, className)}>
 
