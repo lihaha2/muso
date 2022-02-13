@@ -4,7 +4,7 @@ import { Web3ReactProvider } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useState, useEffect } from 'react'
 import Router from "next/router"
-
+import Head from 'next/head'
 const getLibrary = (provider: any): Web3Provider => {
   const library = new Web3Provider(provider)
   library.pollingInterval = 12000
@@ -31,6 +31,10 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, [])
 
   return <Web3ReactProvider getLibrary={getLibrary}>
+    <Head>
+      <link rel="preconnect" href="https://api.pancakeswap.info/" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+    </Head>
     <Component {...pageProps} loading={loading} setLoading={setLoading} />
   </Web3ReactProvider>
 }

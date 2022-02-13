@@ -2,7 +2,6 @@ import styles from './Header.module.css'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
 import Logo from '../../public/logo/MUSO_BRAND.png'
 import { NextSeo } from 'next-seo'
 
@@ -34,14 +33,14 @@ const graphConfig = {
 
 const Header = ({ musoBalance, setAmount, musoCourse, setModalOpen }) => {
 
-    const context = useWeb3React<Web3Provider>()
+    const context = useWeb3React()
     const { account, deactivate, active } = context
 
     return (
         <>
             <NextSeo
                 title="Stake - Muso Finance"
-                description=""
+                description="The bridge between crypto and music"
                 canonical="https://muso.finance/"
                 openGraph={graphConfig}
                 additionalLinkTags={icons}
