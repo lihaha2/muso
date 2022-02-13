@@ -264,7 +264,7 @@ export const getReward = async ({
             progress: 100
         })
         error?.data?.message === "execution reverted: It is not stake time yet" &&
-            setRewardError("It is not stake's time yet")
+            setRewardError("Lock period is not finished!")
     }
 }
 export const withdraw = async (buyer, provider, time, amount) => {
