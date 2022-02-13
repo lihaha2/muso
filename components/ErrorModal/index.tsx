@@ -1,13 +1,13 @@
 import styles from './Error.module.css'
 import { useWeb3React, UnsupportedChainIdError } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
 import { NoEthereumProviderError, UserRejectedRequestError as UserRejectedRequestErrorInjected } from '@web3-react/injected-connector'
 import { NoBscProviderError, UserRejectedRequestError as UserRejectedRequestErrorBSC } from '@binance-chain/bsc-connector'
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from '@web3-react/walletconnect-connector'
 import {useState, useEffect} from 'react'
+import { IErrorProps } from '../../src/types'
 
-const ErrorModal = ()=>{
-    const context = useWeb3React<Web3Provider>()
+const ErrorModal = ({manualError, setManualError}:IErrorProps)=>{
+    const context = useWeb3React()
     const { deactivate, error } = context
     const [message, setMessage] = useState(null)
 
@@ -34,13 +34,19 @@ const ErrorModal = ()=>{
     }
 
     useEffect(() => {
-        !!error ? setMessage(getErrorMessage(error)) : setMessage(null)
-    }, [error])
+        !!error ? 
+            setMessage(getErrorMessage(error)) :
+        !!manualError ? 
+            setMessage(manualError) : 
+        setMessage(null)
+    }, [error, manualError])
 
     return message ?
-        <div className={styles.container} onClick={deactivate} >
+        <div className={styles.container} onClick={()=>{
+            !!error ? deactivate() : setManualError(null)
+        }}>
             <div className={styles.modal} >
-                <div className={styles.modalMessage} >{message}</div>
+                <div className={styles.modalMessage}>{message}</div>
             </div>
         </div>
         : null

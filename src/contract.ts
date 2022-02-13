@@ -31,21 +31,6 @@ const _decimals = async (buyer, provider) => {
     }
 }
 
-export const getUserBalance = async ({ buyer, provider }: IWeb3Props) => {
-    try {
-        const tokenContract = _Contract(buyer, provider, tokenAddress, tokenabi)
-
-        const res = await tokenContract.balanceOf(buyer)
-        const tokenDecimals = await _decimals(buyer, provider)
-        const formatRes = tokenDecimals && ethers.utils.formatUnits(res, tokenDecimals)
-        return parseFloat(formatRes)
-    }
-    catch (err) {
-        console.log('balance err', { err })
-        return 0
-    }
-}
-
 const _getAllowance = async (buyer, provider, monthAddress) => {
     try {
         const tokenContract = _Contract(buyer, provider, tokenAddress, tokenabi)
@@ -67,6 +52,21 @@ const _approveContract = async (buyer, provider, monthAddress) => {
     catch (err) {
         console.log('approve err', { err })
         return false
+    }
+}
+
+export const getUserBalance = async ({ buyer, provider }: IWeb3Props) => {
+    try {
+        const tokenContract = _Contract(buyer, provider, tokenAddress, tokenabi)
+
+        const res = await tokenContract.balanceOf(buyer)
+        const tokenDecimals = await _decimals(buyer, provider)
+        const formatRes = tokenDecimals && ethers.utils.formatUnits(res, tokenDecimals)
+        return parseFloat(formatRes)
+    }
+    catch (err) {
+        console.log('balance err', { err })
+        return 0
     }
 }
 
@@ -214,7 +214,15 @@ export const getEarned = async (buyer, provider) => {
     }
 }
 
-export const getReward = async ({buyer, provider, key, time, setStaked, setStakeProcess }) => {
+export const getReward = async ({
+    buyer, 
+    provider, 
+    key, 
+    time, 
+    setStaked, 
+    setStakeProcess, 
+    setRewardError 
+}) => {
     setStakeProcess({
         val: 25,
         message: 'Sending transaction'
@@ -225,7 +233,9 @@ export const getReward = async ({buyer, provider, key, time, setStaked, setStake
             val: 50,
             message: 'Confirming transaction'
         })
-        let res = await monthContract.getReward(key)
+
+        let res = await monthContract.withdraw(key)
+
         setStakeProcess({
             val: 75,
             message: 'Waiting for reward'
@@ -253,6 +263,8 @@ export const getReward = async ({buyer, provider, key, time, setStaked, setStake
             staked: false,
             progress: 100
         })
+        error?.data?.message === "execution reverted: It is not stake time yet" &&
+            setRewardError("It is not stake's time yet")
     }
 }
 export const withdraw = async (buyer, provider, time, amount) => {

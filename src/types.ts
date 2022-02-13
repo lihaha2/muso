@@ -51,3 +51,8 @@ export interface IReStake {
     setStaked: Dispatch<SetStateAction<IStaked>>, 
     setStakeProcess: Dispatch<SetStateAction<ILoadingProgress>>
 }
+
+export interface IErrorProps {
+    manualError?: string, 
+    setManualError?: (manualError: string)=> void
+}

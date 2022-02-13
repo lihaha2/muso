@@ -1,6 +1,6 @@
 
 type TokenABI = any[]
-export const artistsMonthsAddress:string = '0x8724bd42a18346bd772145B61acD11c38F8da805'
+export const artistsMonthsAddress:string = '0x91bED799727B721BD1a431c21970394B35C52b00'
 export const artistsMonthsAbi:TokenABI = [
 	{
 		"inputs": [
@@ -131,19 +131,6 @@ export const artistsMonthsAbi:TokenABI = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "which",
-				"type": "uint256"
-			}
-		],
-		"name": "getReward",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -311,11 +298,6 @@ export const artistsMonthsAbi:TokenABI = [
 	},
 	{
 		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_amount",
-				"type": "uint256"
-			},
 			{
 				"internalType": "uint256",
 				"name": "which",

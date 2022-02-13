@@ -19,6 +19,7 @@ const Home: NextPage<IProps> = (props) => {
   const [musoCourse, setMusoCourse] = useState(0)
   const [musoBalance, setMusoBalance] = useState(0)
   const [modalOpen, setModalOpen] = useState(false)
+  const [rewardError, setRewardError] = useState(null)
   const [stakeProcess, setStakeProcess] = useState<ILoadingProgress>({
     val:0,
     message: ''
@@ -210,6 +211,7 @@ const Home: NextPage<IProps> = (props) => {
           staked={staked} 
           setStaked={setStaked}
           setStakeProcess={setStakeProcess}
+          setRewardError={setRewardError}
         />
       </main>
 
@@ -223,7 +225,10 @@ const Home: NextPage<IProps> = (props) => {
         setOpen={setModalOpen}
       />
       <Loader loading={loading} process={stakeProcess} />
-      <ErrorModal />
+      <ErrorModal 
+        manualError={rewardError}
+        setManualError={setRewardError}
+      />
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { getUserStakes, reStake, getReward } from '../../src/contract'
 import { useEffect, useState } from 'react'
 
 const FootBlocks = (props) => {
-    const { musoCourse, stakeProcess, setStaked, setStakeProcess } = props
+    const { musoCourse, stakeProcess, setStaked, setStakeProcess, setRewardError } = props
     const matches = useMediaQuery('(max-width:400px)')
     const context = useWeb3React()
     const { library, account, active } = context
@@ -38,14 +38,15 @@ const FootBlocks = (props) => {
 
     const getRewardHandle = async() => {
         const {time, key} = activeStake.stake 
-        await getReward({
-            buyer:account, 
-            provider:library,
-            key,
-            time,
-            setStaked,
-            setStakeProcess
-        })
+            await getReward({
+                buyer:account, 
+                provider:library,
+                key,
+                time,
+                setStaked,
+                setStakeProcess,
+                setRewardError
+            })
     }
     
     const reStakeHandle = async() => {
@@ -260,7 +261,7 @@ const FootBlocks = (props) => {
                                         width: 64,
                                         height: 64
                                     }
-                                }
+                                }                           
                             />
                             :
                             <div className={styles.willQR}>
