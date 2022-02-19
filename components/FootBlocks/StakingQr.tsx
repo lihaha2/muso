@@ -18,7 +18,13 @@ const StakingQr = ({inProcess, setInProcess, discountObj, setDiscountObj, librar
                     ...discountObj,
                     discount: res
                 })
-                let saveRes = await axios.post('http://65.21.242.70:7010/api/addPromo',{
+                axios.interceptors.response.use(
+                    response => response,
+                    error => {
+                        return Promise.reject(error)
+                    }
+                )
+                await axios.post('http://65.21.242.70:7010/api/addPromo',{
                     promo: res,
                     wallet: account,
                     discount: discountObj.discountPercent+'%'
