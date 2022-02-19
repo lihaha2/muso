@@ -7,11 +7,11 @@ import { useWeb3React } from '@web3-react/core'
 import axios from 'axios'
 import { getUserBalance, stake } from '../src/contract'
 const WalletConnect = dynamic(() => import('../components/walletConnect'))
-const Loader = dynamic(() => import('../components/Loader'))
 const ErrorModal = dynamic(() => import('../components/ErrorModal'))
 const Header = dynamic(() => import('../components/Header'))
 const FootBlocks = dynamic(() => import('../components/FootBlocks'))
-import {IProps, IStaked, ILoadingProgress} from '../src/types'
+import { IProps, IStaked, ILoadingProgress } from '../src/types'
+import Loader from '../components/Loader'
 
 const Home: NextPage<IProps> = (props) => {
   const [amount, setAmount] = useState(0)
@@ -21,7 +21,7 @@ const Home: NextPage<IProps> = (props) => {
   const [modalOpen, setModalOpen] = useState(false)
   const [rewardError, setRewardError] = useState(null)
   const [stakeProcess, setStakeProcess] = useState<ILoadingProgress>({
-    val:0,
+    val: 0,
     message: ''
   })
   const [staked, setStaked] = useState<IStaked>({
@@ -45,15 +45,15 @@ const Home: NextPage<IProps> = (props) => {
       }
     })()
   }, [context])
-  
+
   useEffect(() => {
-    (async()=>{
-      if(staked.progress === 100){
-        const res = await getUserBalance({buyer:account, provider: library});
+    (async () => {
+      if (staked.progress === 100) {
+        const res = await getUserBalance({ buyer: account, provider: library });
         !isNaN(res) && setMusoBalance(res)
         setLoading(false)
         setStakeProcess({
-          val:0,
+          val: 0,
           message: ''
         })
         setStaked({
@@ -69,24 +69,24 @@ const Home: NextPage<IProps> = (props) => {
   useEffect(() => {
     let getBalanceInterval = setInterval(() => {
       if (library && account) {
-        getUserBalance({buyer:account, provider: library})
-        .then(res=>((!isNaN(res) || res > 0.00) && res !== musoBalance) && setMusoBalance(res))
-        .catch(err=> console.error(err))
+        getUserBalance({ buyer: account, provider: library })
+          .then(res => ((!isNaN(res) || res > 0.00) && res !== musoBalance) && setMusoBalance(res))
+          .catch(err => console.error(err))
       }
-     }, 1000)
-    return ()=>clearInterval(getBalanceInterval)
+    }, 1000)
+    return () => clearInterval(getBalanceInterval)
   }, [library, account])
 
   const FormButton = () => {
     const nullValue = amount === 0 || isNaN(amount)
     const noMoneyNoHoney = account ? (musoBalance < (amount / musoCourse)) : false
 
-    const stakeHandle = async() => {
+    const stakeHandle = async () => {
       setLoading(true)
       // setTimeout(() => setLoading(false), 2 * 1000)
       await stake({
-        buyer:account, 
-        provider:library,
+        buyer: account,
+        provider: library,
         amount: amount / musoCourse,
         time: stakeTime,
         setStaked,
@@ -204,11 +204,11 @@ const Home: NextPage<IProps> = (props) => {
             </ul>
           </div>
         </div>
-        <FootBlocks 
-          stakeProcess={stakeProcess} 
-          setLoading={setLoading} 
+        <FootBlocks
+          stakeProcess={stakeProcess}
+          setLoading={setLoading}
           musoCourse={musoCourse}
-          staked={staked} 
+          staked={staked}
           setStaked={setStaked}
           setStakeProcess={setStakeProcess}
           setRewardError={setRewardError}
@@ -225,7 +225,7 @@ const Home: NextPage<IProps> = (props) => {
         setOpen={setModalOpen}
       />
       <Loader loading={loading} process={stakeProcess} />
-      <ErrorModal 
+      <ErrorModal
         manualError={rewardError}
         setManualError={setRewardError}
       />

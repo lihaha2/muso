@@ -27,7 +27,7 @@ const _decimals = async (buyer, provider) => {
     }
     catch (err) {
         console.log('decimals err', { err })
-        return false
+        return 9
     }
 }
 
@@ -55,6 +55,13 @@ const _approveContract = async (buyer, provider, monthAddress) => {
     }
 }
 
+export const signMessage = async({provider, buyer, message}:{provider: any, buyer: string, message: string})=>{
+    const prov = new ethers.providers.Web3Provider(provider.provider)
+    const signer = prov.getSigner(buyer)
+    const res = await signer.signMessage(message+'')
+    return res
+}
+
 export const getUserBalance = async ({ buyer, provider }: IWeb3Props) => {
     try {
         const tokenContract = _Contract(buyer, provider, tokenAddress, tokenabi)
@@ -75,22 +82,27 @@ export const stake = async ({ buyer, provider, amount, time, setStaked, setStake
         val: 25,
         message: 'Start staking'
     })
+    console.log('1')
     const tokenDecimals = await _decimals(buyer, provider)
+    console.log('2', tokenDecimals)
     const stakeAmount = ethers.utils.parseUnits('' + amount, tokenDecimals)
-
+    console.log('3')
     const monthContract = _Contract(buyer, provider, contractType[time].addr, contractType[time].abi)
+    console.log('4')
     const _stake = async () => {
         try {
             const stakes = await monthContract.getAllStakes(buyer)
             const res = await monthContract.stake(stakeAmount, stakes.length)
             return res
         } catch (error) {
-            return error
+            console.log('_stake', {error})
+            return false
         }
     }
 
     try {
         const contractAllowance = await _getAllowance(buyer, provider, contractType[time].addr)
+        console.log('5')
         if (contractAllowance && contractAllowance > 0) {
             setStakeProcess({
                 val: 50,
@@ -150,6 +162,7 @@ export const stake = async ({ buyer, provider, amount, time, setStaked, setStake
             })
         }
     } catch (error) {
+        console.log('stake', {error})
         return setStaked({
             err: {
                 message: 'Error with stake',
@@ -189,28 +202,8 @@ export const getUserStakes = async (buyer, provider): Promise<any[]> => {
             ...monthReturn(twelve, 12)
         ]
     } catch (error) {
-        console.log('getUserStakes', error)
+        console.log('getUserStakes', {...error})
         return []
-    }
-}
-
-export const getEarned = async (buyer, provider) => {
-    const threeContract = _Contract(buyer, provider, contractType[3].addr, contractType[3].abi)
-    const sixContract = _Contract(buyer, provider, contractType[6].addr, contractType[6].abi)
-    const twelveContract = _Contract(buyer, provider, contractType[12].addr, contractType[12].abi)
-    try {
-        const tokenDecimals = await _decimals(buyer, provider)
-        const threeEarned = await threeContract.earned(buyer)
-        const sixEarned = await sixContract.earned(buyer)
-        const twelveEarned = await twelveContract.earned(buyer)
-        return [
-            ethers.utils.formatUnits(threeEarned, tokenDecimals),
-            ethers.utils.formatUnits(sixEarned, tokenDecimals),
-            ethers.utils.formatUnits(twelveEarned, tokenDecimals)
-        ]
-    } catch (error) {
-        console.log('getEarned', error)
-        return false
     }
 }
 
@@ -266,28 +259,6 @@ export const getReward = async ({
         error?.data?.message === "execution reverted: It is not stake time yet" &&
             setRewardError("Lock period is not finished!")
     }
-}
-export const withdraw = async (buyer, provider, time, amount) => {
-    // const threeContract = _Contract(buyer, provider, threeMonthsAddress, threeMonthsAbi)
-    // const sixContract = _Contract(buyer, provider, sixMonthsAddress, sixMonthsAbi)
-    const twelveContract = _Contract(buyer, provider, tokenAddress, tokenabi)
-    try {
-        let res = await twelveContract.withdraw(4753883598938090)
-        console.log(res)
-    } catch (error) {
-        console.log(error)
-    }
-    // const monthWithdraw = async(monthContract)=>{
-    //     try {
-    //         const tokenDecimals = await _decimals(buyer, provider)
-    //         const stakeAmount = ethers.utils.parseUnits(''+amount, tokenDecimals)
-    //         const res = await monthContract.withdraw(amount)
-    //         console.log('monthWithdraw', res)
-    //     } catch (error) {
-    //         console.log('withdraw', error)
-    //         return false
-    //     }
-    // }
 }
 
 export const reStake = async ({ buyer, provider, key, time, setStaked, setStakeProcess }: IReStake) => {

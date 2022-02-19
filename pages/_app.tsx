@@ -7,7 +7,7 @@ import Router from "next/router"
 import Head from 'next/head'
 const getLibrary = (provider: any): Web3Provider => {
   const library = new Web3Provider(provider)
-  library.pollingInterval = 12000
+  library.pollingInterval = 5000
   return library
 }
 

@@ -1,6 +1,6 @@
 
 type TokenABI = any[]
-export const threeMonthsAddress:string = '0x3e75B11af4d4eB5e91887f83C46C421fA1e6477c'
+export const threeMonthsAddress:string = '0xdB37c6B077011970cF493Bd8C0FeBB7d8804EE2e'
 export const threeMonthsAbi:TokenABI = [
 	{
 		"inputs": [
@@ -12,6 +12,11 @@ export const threeMonthsAbi:TokenABI = [
 			{
 				"internalType": "address",
 				"name": "_rewardsToken",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_splitContract",
 				"type": "address"
 			}
 		],
@@ -134,21 +139,23 @@ export const threeMonthsAbi:TokenABI = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_sender",
-				"type": "address"
-			},
+		"inputs": [],
+		"name": "getTaxes",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "lastTransferTaxes",
+		"outputs": [
 			{
 				"internalType": "uint256",
-				"name": "_amount",
+				"name": "",
 				"type": "uint256"
 			}
 		],
-		"name": "getTaxesThree",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -214,6 +221,19 @@ export const threeMonthsAbi:TokenABI = [
 		"outputs": [
 			{
 				"internalType": "contract IBEP20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "splitContract",
+		"outputs": [
+			{
+				"internalType": "contract ITaxes",
 				"name": "",
 				"type": "address"
 			}

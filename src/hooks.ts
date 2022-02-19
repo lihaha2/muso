@@ -1,7 +1,33 @@
 import { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
-
 import { injected } from './connectors'
+
+declare let window: any
+
+const chains = {
+  56: {
+    chainId: "0x38",
+    rpcUrls: ["https://bsc-dataseed.binance.org/"],
+    chainName: "Binance Smart Chain",
+    nativeCurrency: {
+      name: "BSC",
+      symbol: "BNB",
+      decimals: 18
+    },
+    blockExplorerUrls: ["https://bscscan.com"]
+  },
+  97: {
+    chainId: "0x61",
+    rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+    chainName: "BSC Testnet",
+    nativeCurrency: {
+      name: "BSC",
+      symbol: "BNB",
+      decimals: 18
+    },
+    blockExplorerUrls: ["https://explorer.binance.org/smart-testnet"]
+  }
+}
 
 export function useEagerConnect() {
   const { activate, active } = useWeb3React()
@@ -14,6 +40,12 @@ export function useEagerConnect() {
         activate(injected, undefined, true).catch((err) => {
           console.log('tryed err', err)
           setTried(true)
+          if (err.name === "UnsupportedChainIdError" && window?.ethereum) {
+            window.ethereum.request({
+              method: "wallet_addEthereumChain",
+              params: [chains[97]]
+            })
+          }
         })
       } else {
         setTried(true)
@@ -33,7 +65,7 @@ export function useEagerConnect() {
 
 export function useInactiveListener(suppress: boolean = false) {
   const { active, error, activate, deactivate } = useWeb3React()
- 
+
   useEffect((): any => {
     const { ethereum } = window as any
     if (ethereum && ethereum.on && !active && !error && !suppress) {
@@ -52,6 +84,7 @@ export function useInactiveListener(suppress: boolean = false) {
         }
       }
       const handleNetworkChanged = (networkId: string | number) => {
+        console.log('networkId', networkId)
         console.log("Handling 'networkChanged' event with payload", networkId)
         activate(injected)
       }
