@@ -5,6 +5,17 @@ import { injected } from './connectors'
 declare let window: any
 
 const chains = {
+  4: {
+    chainId: "0x4",
+    rpcUrls: ["https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"],
+    chainName: "Rinkeby",
+    nativeCurrency: {
+      name: "ETH",
+      symbol: "ETH",
+      decimals: 18
+    },
+    blockExplorerUrls: ["https://rinkeby.etherscan.io"]
+  },
   56: {
     chainId: "0x38",
     rpcUrls: ["https://bsc-dataseed.binance.org/"],
@@ -38,12 +49,12 @@ export function useEagerConnect() {
     injected.isAuthorized().then((isAuthorized: boolean) => {
       if (isAuthorized) {
         activate(injected, undefined, true).catch((err) => {
-          console.log('tryed err', err)
+          console.log('tryed err', {err})
           setTried(true)
           if (err.name === "UnsupportedChainIdError" && window?.ethereum) {
             window.ethereum.request({
               method: "wallet_addEthereumChain",
-              params: [chains[97]]
+              params: [chains[4]]
             })
           }
         })

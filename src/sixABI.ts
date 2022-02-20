@@ -1,6 +1,6 @@
 
 type TokenABI = any[]
-export const sixMonthsAddress:string = '0x270Dec1b8e9Dc44d489Bb327753907e9B54E73e4'
+export const sixMonthsAddress:string = '0x4a10Cd724d7d7939144f5a7dEF1174b3d2Ee01ea'
 export const sixMonthsAbi:TokenABI = [
 	{
 		"inputs": [

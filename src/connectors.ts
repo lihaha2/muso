@@ -21,7 +21,7 @@ export const walletconnect = new WalletConnectConnector({
   rpc: { 
     // 56: RPC_URLS[56], 
     // 97: RPC_URLS[97], 
-    4: RPC_URLS[4], 
+    4: RPC_URLS[CHAIN_IDS[0]], 
   },
   qrcode: true
 })

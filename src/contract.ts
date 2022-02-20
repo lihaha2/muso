@@ -82,13 +82,9 @@ export const stake = async ({ buyer, provider, amount, time, setStaked, setStake
         val: 25,
         message: 'Start staking'
     })
-    console.log('1')
     const tokenDecimals = await _decimals(buyer, provider)
-    console.log('2', tokenDecimals)
-    const stakeAmount = ethers.utils.parseUnits('' + amount, tokenDecimals)
-    console.log('3')
+    const stakeAmount = ethers.utils.parseUnits(`${amount.toFixed(tokenDecimals)}` , tokenDecimals)
     const monthContract = _Contract(buyer, provider, contractType[time].addr, contractType[time].abi)
-    console.log('4')
     const _stake = async () => {
         try {
             const stakes = await monthContract.getAllStakes(buyer)
@@ -102,7 +98,6 @@ export const stake = async ({ buyer, provider, amount, time, setStaked, setStake
 
     try {
         const contractAllowance = await _getAllowance(buyer, provider, contractType[time].addr)
-        console.log('5')
         if (contractAllowance && contractAllowance > 0) {
             setStakeProcess({
                 val: 50,
