@@ -52,7 +52,7 @@ const FootBlocks = (props) => {
                             return Promise.reject(error)
                         }
                     )
-                    let res = await axios.post('http://65.21.242.70:7010/api/findPromo', {
+                    let res = await axios.post('https://staking.muso.finance/api/findPromo', {
                         wallet: account
                     })
                     const { promo, discount } = res.data.message
